@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Firebase compat — in <head> so it's ready before body scripts run -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyDNX6vM2iKlgDD7BDSDVRvbXiRpJtfWwsQ",
+    authDomain: "thailand-trip-2026-c9b54.firebaseapp.com",
+    databaseURL: "https://thailand-trip-2026-c9b54-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "thailand-trip-2026-c9b54",
+    storageBucket: "thailand-trip-2026-c9b54.firebasestorage.app",
+    messagingSenderId: "824755022635",
+    appId: "1:824755022635:web:5634a1b5a016d17db7336e"
+  });
+  window._db = firebase.database();
+</script>
+<title>Thailand Trip 2026 — Tama, Evan, Ken, Chando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1F33;--navy2:#122840;--navy3:#0D2A40;
+  --teal:#0D9488;--teal2:#14B8A6;--teal3:#CCFBF1;--teal4:#F0FDFA;
+  --gold:#F59E0B;--gold2:#FCD34D;--gold3:#FFFBEB;
+  --cream:#FAFAF7;--white:#FFFFFF;
+  --muted:#6B8A89;--border:#D1EAE8;--text:#1C3540;--sub:#4A7A74;
+  --red:#EF4444;--red2:#FEE2E2;--green:#10B981;--green2:#D1FAE5;
+  --idr-color:#0D9488;--thb-color:#F59E0B;
+  --r:12px;--r2:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+input,select,textarea,button{font-family:'Outfit',sans-serif}
+
+/* HERO */
+.hero{
+  position:relative;overflow:hidden;padding:48px 20px 36px;
+  min-height:300px;
+}
+/* actual BG image on ::before so we control position independently */
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:
+    url('https://images.unsplash.com/photo-1598962779024-e1b6c2b24cf1?w=1400&q=85&fit=crop'),
+    url('https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=1400&q=85&fit=crop');
+  background-size:cover;
+  background-position:center 60%;
+  background-repeat:no-repeat;
+}
+/* dark gradient overlay on ::after */
+.hero::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(175deg,
+      rgba(11,31,51,.78) 0%,
+      rgba(11,31,51,.55) 45%,
+      rgba(13,100,80,.35) 100%);
+}
+.hero-inner{max-width:920px;margin:0 auto;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#F59E0B28;border:1px solid #F59E0B55;color:var(--gold2);font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.12em;padding:5px 14px;border-radius:20px;margin-bottom:12px;backdrop-filter:blur(4px)}
+.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,5.5vw,58px);font-weight:800;color:var(--white);line-height:1.0;text-shadow:0 2px 20px #0006;letter-spacing:-.5px}
+.hero-title span{color:var(--gold2);display:block}
+.hero-meta{font-size:13px;color:#D4EDE9;margin-top:6px;font-weight:400;text-shadow:0 1px 8px #0004}
+.hero-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;align-items:center;gap:5px;background:#FFFFFF14;border:1px solid #FFFFFF22;color:#D8EFEC;font-size:10px;padding:5px 12px;border-radius:20px;backdrop-filter:blur(4px);font-weight:500}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:var(--teal2);flex-shrink:0}
+
+/* NAV */
+.nav-wrap{position:sticky;top:0;z-index:100;background:var(--navy);border-bottom:1px solid #1E3D55;box-shadow:0 4px 20px #0008}
+.nav{display:flex;overflow-x:auto;max-width:920px;margin:0 auto;padding:0 10px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;cursor:pointer;font-size:11px;font-weight:500;color:#6A9A96;padding:13px 13px;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;font-family:'Outfit',sans-serif}
+.nav-btn:hover{color:#A8D4CF}
+.nav-btn.active{color:var(--teal2);border-bottom-color:var(--teal2);font-weight:700}
+
+/* MAIN */
+.main{max-width:920px;margin:0 auto;padding:24px 14px 80px}
+.section{display:none}.section.active{display:block}
+
+/* SECTION HEADER */
+.sec-hdr{margin-bottom:18px}
+.sec-title{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:2px;letter-spacing:-.5px}
+.sec-sub{font-size:12px;color:var(--muted)}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.card-header{background:var(--navy2);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:10px;font-weight:500;color:var(--teal2);font-family:'Fira Code',monospace;letter-spacing:.08em;text-transform:uppercase}
+.card-body{padding:14px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r2);padding:12px 13px}
+.stat-label{font-size:9px;color:var(--muted);font-family:'Fira Code',monospace;letter-spacing:.06em;margin-bottom:3px;text-transform:uppercase}
+.stat-val{font-size:17px;font-weight:700;color:var(--navy);line-height:1.1}
+.stat-sub{font-size:10px;color:var(--sub);margin-top:2px}
+.stat-card.dark{background:var(--navy);border-color:var(--navy)}
+.stat-card.dark .stat-label{color:var(--teal2)}
+.stat-card.dark .stat-val{color:var(--white)}
+.stat-card.dark .stat-sub{color:var(--muted)}
+
+/* ── IDR/THB DUAL DISPLAY ── */
+.money-primary{font-size:14px;font-weight:700;color:var(--text)}
+.money-secondary{font-size:10px;color:var(--muted);font-family:'Fira Code',monospace}
+.idr-badge{background:#E0F7F5;color:var(--teal);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'Fira Code',monospace}
+.thb-badge{background:var(--gold3);color:#92400E;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'Fira Code',monospace}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r2)}
+.table-wrap.scrollable{max-height:420px;overflow-y:auto}
+.table-wrap.scrollable thead th{position:sticky;top:0;z-index:2}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:650px}
+thead th{background:var(--navy);color:var(--teal2);padding:9px 10px;text-align:left;font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.05em;white-space:nowrap}
+tbody tr:nth-child(even){background:#F8FFFE}
+tbody tr:hover{background:var(--teal4)}
+tbody td{padding:7px 10px;border-bottom:1px solid #F0F7F6;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tfoot td{background:var(--gold3);font-weight:700;padding:9px 10px;border-top:2px solid var(--gold2)}
+/* freeze tfoot in scrollable tables */
+.table-wrap.scrollable table{border-collapse:separate;border-spacing:0}
+.table-wrap.scrollable tfoot tr{position:sticky;bottom:0;z-index:3}
+.table-wrap.scrollable tfoot td{box-shadow:0 -2px 0 var(--gold2)}
+
+/* FORMS */
+.form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+.form-group{display:flex;flex-direction:column;gap:3px}
+.form-group.wide{grid-column:1/-1}
+.form-group.half{grid-column:span 2}
+label.fl{font-size:10px;font-weight:600;color:var(--sub);letter-spacing:.02em}
+input.fi,select.fi{background:var(--teal4);border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--text);outline:none;transition:border-color .2s;width:100%}
+input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)}
+.fi-idr{border-color:var(--idr-color)!important;background:#F0FDFA!important}
+.fi-thb{border-color:var(--thb-color)!important;background:var(--gold3)!important}
+
+/* dual input row */
+.dual-currency{display:grid;grid-template-columns:1fr 28px 1fr;align-items:end;gap:6px}
+.dual-sep{display:flex;align-items:center;justify-content:center;padding-bottom:7px;font-size:10px;color:var(--muted);font-weight:700}
+.currency-hint{font-size:9px;margin-top:2px}
+.hint-idr{color:var(--teal)}
+.hint-thb{color:var(--gold)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-teal{background:var(--teal);color:var(--white)}.btn-teal:hover{background:var(--teal2)}
+.btn-gold{background:var(--gold);color:var(--navy)}.btn-gold:hover{background:var(--gold2)}
+.btn-red{background:var(--red);color:var(--white)}.btn-red:hover{background:#DC2626}
+.btn-outline{background:transparent;color:var(--teal);border:1.5px solid var(--teal)}.btn-outline:hover{background:var(--teal4)}
+.btn-sm{padding:4px 9px;font-size:10px;border-radius:4px}
+.flex-end{display:flex;justify-content:flex-end;gap:8px}
+
+/* TAGS */
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.tag-flight{background:#EEF2FF;color:#3730A3}
+.tag-hotel{background:#FDF4FF;color:#7E22CE}
+.tag-transport{background:#E0F2FE;color:#075985}
+.tag-food{background:#DCFCE7;color:#166534}
+.tag-activity{background:#FEF9C3;color:#854D0E}
+.tag-nightlife{background:#FFE4E6;color:#9F1239}
+.tag-shopping{background:#FEF3C7;color:#92400E}
+.tag-misc{background:#F1F5F9;color:#475569}
+.tag-michelin{background:#FFFBEB;color:#92400E;border:1px solid #FCD34D}
+.tag-halal{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.tag-bar{background:#FEF9C3;color:#854D0E}
+.tag-explore{background:#E0F2FE;color:#075985}
+.tag-jersey{background:#FFE4E6;color:#9F1239}
+.tag-muay{background:#EDE9FE;color:#5B21B6}
+.tag-travel{background:#F1F5F9;color:#475569}
+
+/* PERSON CARDS */
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px}
+.p-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.p-card-top{background:var(--navy2);padding:10px 12px;display:flex;align-items:center;gap:10px}
+.p-avatar{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--white);flex-shrink:0}
+.p-name{font-weight:600;font-size:13px;color:var(--white)}
+.p-card-body{padding:8px 12px}
+.p-row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:1px solid #F0F7F6;font-size:11px}
+.p-row:last-child{border-bottom:none}
+.p-row-label{color:var(--muted)}
+.p-row-val{font-family:'Fira Code',monospace;font-weight:600;color:var(--text)}
+.p-row-val.pos{color:var(--green)}
+.p-row-val.neg{color:var(--red)}
+.p-row-val.zero{color:var(--muted)}
+.p-row-sub{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* SETTLEMENT */
+.settle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F0F7F6;font-size:12px}
+.settle-row:last-child{border-bottom:none}
+.settle-arrow{color:var(--red);font-weight:700;margin:0 6px}
+.settle-amt{font-family:'Fira Code',monospace;font-weight:700;color:var(--red)}
+.settle-amt-sub{font-size:10px;color:var(--muted);font-family:'Fira Code',monospace}
+
+/* BUDGET BARS */
+.budget-item{margin-bottom:14px}
+.budget-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.budget-item-left{display:flex;align-items:center;gap:10px}
+.budget-item-label{font-size:12px;font-weight:600;color:var(--text)}
+.budget-inputs{display:flex;gap:6px;align-items:center}
+.budget-idr-input{background:var(--teal4);border:1.5px solid var(--teal);border-radius:5px;padding:3px 7px;font-size:11px;width:100px;outline:none;color:var(--text)}
+.budget-thb-input{background:var(--gold3);border:1.5px solid var(--gold);border-radius:5px;padding:3px 7px;font-size:11px;width:80px;outline:none;color:var(--text)}
+.budget-item-right{font-size:10px;color:var(--muted);font-family:'Fira Code',monospace;text-align:right}
+.bar-bg{height:7px;background:#EEF7F6;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--teal);transition:width .4s}
+.bar-fill.over{background:var(--red)}
+.budget-item-status{font-size:10px;margin-top:3px;font-weight:600;color:var(--green)}
+.budget-item-status.over{color:var(--red)}
+
+/* BOOKING */
+.booking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.b-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r2);padding:12px 13px}
+.b-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.b-name{font-size:12px;font-weight:600;color:var(--text);line-height:1.3}
+.status-pill{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.s-confirmed{background:var(--green2);color:#065F46}
+.s-booked{background:#DBEAFE;color:#1E40AF}
+.s-pending{background:#FEF3C7;color:#92400E}
+.s-open{background:#F1F5F9;color:#475569}
+.b-detail{font-size:10px;color:var(--sub);margin-bottom:2px;display:flex;align-items:center;gap:4px}
+
+/* PACKING */
+.pack-section{margin-bottom:18px}
+.pack-sec-title{font-size:10px;font-weight:700;color:var(--teal);font-family:'Fira Code',monospace;letter-spacing:.08em;padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
+.pack-row:last-child{border-bottom:none}
+.pack-row:hover{background:#F8FFFE}
+.pack-check{display:flex;justify-content:center}
+.pack-check input[type=checkbox]{width:15px;height:15px;accent-color:var(--teal);cursor:pointer}
+.pack-person-hdr{font-size:8px;font-weight:700;color:var(--muted);font-family:'Fira Code',monospace;text-align:center}
+
+/* ITINERARY */
+.city-div{display:flex;align-items:center;gap:10px;margin:22px 0 12px}
+.city-div::before,.city-div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.city-pill{background:var(--navy);color:var(--teal2);font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.1em;padding:6px 16px;border-radius:20px;white-space:nowrap;font-weight:500}
+.day-block{margin-bottom:14px}
+.day-hdr{background:var(--navy2);border-left:3px solid var(--teal);padding:9px 13px;border-radius:var(--r2) var(--r2) 0 0;display:flex;justify-content:space-between;align-items:center}
+.day-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;color:var(--white);letter-spacing:-.2px}
+.day-sub{font-size:10px;color:var(--muted);font-family:'Fira Code',monospace}
+.day-body{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r2) var(--r2);overflow:hidden}
+.act-row{display:grid;grid-template-columns:48px 1fr;border-bottom:1px solid #F0F7F6}
+.act-row:last-child{border-bottom:none}
+.act-row:hover{background:#F8FFFE}
+.act-tc{display:flex;align-items:flex-start;justify-content:center;padding:11px 0 0;border-right:1px solid #F0F7F6}
+.t-pill{background:var(--teal);color:var(--white);font-family:'Fira Code',monospace;font-size:8px;padding:2px 5px;border-radius:4px}
+.act-ic{padding:9px 12px 8px}
+.act-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:3px}
+.act-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;flex:1}
+.act-tags{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.act-detail{font-size:11px;color:var(--sub);line-height:1.5}
+.act-warn{margin-top:5px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;padding:3px 8px;font-size:10px;color:#92400E;font-style:italic}
+.act-alt{margin-top:4px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:4px;padding:3px 8px;font-size:10px;color:#1D4ED8}
+.money-tag{background:var(--teal3);color:var(--teal);font-family:'Fira Code',monospace;font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px}
+
+/* KULINER */
+.k-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px;margin-top:4px}
+.k-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.k-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px #0D944818}
+.k-card-top{padding:12px 13px 9px;border-left:3px solid var(--teal)}
+.k-city{font-family:'Fira Code',monospace;font-size:8px;color:var(--muted);letter-spacing:.1em;margin-bottom:3px;text-transform:uppercase}
+.k-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:5px}
+.k-tags{display:flex;gap:4px;flex-wrap:wrap}
+.k-body{padding:8px 13px 11px;border-top:1px solid #F0F7F6;font-size:11px;color:var(--sub);line-height:1.5}
+.k-menu{margin-bottom:4px}
+.k-price{display:inline-flex;align-items:center;gap:4px;margin-top:5px}
+.k-booking{display:inline-flex;align-items:center;gap:4px;margin-top:5px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:5px;padding:3px 8px;font-size:9px;font-weight:600;color:#92400E}
+.k-booking.ok{background:var(--green2);border-color:#86EFAC;color:#065F46}
+
+/* TIPS */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:4px}
+.tip-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.tip-header{background:var(--navy);padding:10px 13px;font-size:10px;font-weight:600;letter-spacing:.07em;color:var(--teal2);font-family:'Fira Code',monospace}
+.tip-item{padding:8px 13px;border-bottom:1px solid #F0F7F6;display:flex;gap:8px;align-items:flex-start}
+.tip-item:last-child{border-bottom:none}
+.tip-dot{width:5px;height:5px;border-radius:50%;background:var(--teal2);flex-shrink:0;margin-top:4px}
+.tip-label{font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px}
+.tip-detail{font-size:10px;color:var(--sub);line-height:1.45}
+.tip-meta{display:inline-block;margin-top:3px;background:var(--gold2);color:#78350F;font-family:'Fira Code',monospace;font-size:9px;font-weight:500;padding:1px 7px;border-radius:4px}
+.quick-ref{background:var(--navy);border-radius:var(--r);padding:18px;margin-top:16px}
+.quick-ref-title{font-family:'Fira Code',monospace;font-size:10px;color:var(--teal2);letter-spacing:.1em;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px}
+.ref-item{background:#0D2840;border:1px solid #1E4060;border-radius:6px;padding:9px 11px}
+.ref-label{font-size:10px;font-weight:600;color:var(--white);margin-bottom:2px}
+.ref-val{font-size:10px;color:var(--teal2);font-family:'Fira Code',monospace}
+
+/* MISC */
+.divider{height:1px;background:var(--border);margin:14px 0}
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:12px}
+.mono{font-family:'Fira Code',monospace}
+.fw6{font-weight:600}
+.mt8{margin-top:8px}
+.flex-end{display:flex;justify-content:flex-end;gap:8px}
+.text-pos{color:var(--green)}
+.text-neg{color:var(--red)}
+.text-m{color:var(--muted)}
+
+
+
+/* KURS BUTTON & MODAL */
+.kurs-btn{display:inline-flex;align-items:center;gap:6px;background:#FFFFFF10;border:1px solid #FFFFFF25;color:var(--white);font-size:12px;padding:7px 14px;border-radius:20px;cursor:pointer;transition:background .2s;font-family:'Outfit',sans-serif}
+.kurs-btn:hover,.kurs-btn:active{background:#FFFFFF20}
+.kurs-btn strong{color:var(--gold2)}
+.kurs-preset{background:var(--teal4);border:1.5px solid var(--border);border-radius:8px;padding:10px;font-size:13px;font-weight:600;color:var(--teal);cursor:pointer;font-family:'Fira Code',monospace;transition:all .15s}
+.kurs-preset:hover,.kurs-preset:active{background:var(--teal);color:white;border-color:var(--teal)}
+
+/* SYNC STATUS */
+.sync-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:3px 10px;border-radius:10px;font-family:'Fira Code',monospace}
+.sync-connecting{background:#FEF3C7;color:#92400E}
+.sync-live{background:var(--green2);color:#065F46}
+.sync-error{background:var(--red2);color:#991B1B}
+
+
+/* Custom scrollbar for log sections */
+#settlement-log-body::-webkit-scrollbar,
+#settle-list::-webkit-scrollbar,
+#booking-grid::-webkit-scrollbar,
+.table-wrap.scrollable::-webkit-scrollbar,
+.scrollable::-webkit-scrollbar { width:4px; height:4px }
+#settlement-log-body::-webkit-scrollbar-track,
+#settle-list::-webkit-scrollbar-track,
+#booking-grid::-webkit-scrollbar-track,
+.table-wrap.scrollable::-webkit-scrollbar-track,
+.scrollable::-webkit-scrollbar-track { background:transparent }
+#settlement-log-body::-webkit-scrollbar-thumb,
+#settle-list::-webkit-scrollbar-thumb,
+#booking-grid::-webkit-scrollbar-thumb,
+.table-wrap.scrollable::-webkit-scrollbar-thumb,
+.scrollable::-webkit-scrollbar-thumb { background:var(--border);border-radius:2px }
+
+
+/* Maps button */
+
+
+
+/* ── BOTTOM SHEET MODAL (shared) ── */
+.bs-overlay{display:none;position:fixed;inset:0;background:#0007;z-index:8000;backdrop-filter:blur(2px)}
+.bs-overlay.open{display:block}
+.bs-sheet{display:none;position:fixed;bottom:0;left:0;right:0;z-index:8001;background:var(--white);border-radius:20px 20px 0 0;padding:20px 20px 40px;box-shadow:0 -8px 40px #0005;max-height:90vh;overflow-y:auto;transition:transform .25s}
+.bs-sheet.open{display:block}
+.bs-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.bs-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.bs-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.bs-actions{display:flex;gap:8px;margin-top:16px}
+.bs-actions .btn{flex:1;justify-content:center;padding:12px}
+
+/* ── MAPS input in act-row ── */
+.maps-edit-btn{display:inline-flex;align-items:center;gap:4px;background:transparent;border:1px dashed var(--border);color:var(--muted);font-size:9px;padding:2px 8px;border-radius:8px;cursor:pointer;margin-top:4px;transition:all .15s;font-family:'Outfit',sans-serif}
+.maps-edit-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal4)}
+.maps-edit-btn.has-link{background:#E8F5E9;border-color:#A5D6A7;border-style:solid;color:#2E7D32}
+.maps-link-btn{display:inline-flex;align-items:center;gap:4px;background:#E8F5E9;border:1px solid #A5D6A7;color:#2E7D32;font-size:9px;font-weight:600;padding:2px 8px;border-radius:8px;text-decoration:none;cursor:pointer;margin-top:4px;transition:all .15s;font-family:'Outfit',sans-serif}
+.maps-link-btn:hover,.maps-link-btn:active{background:#2E7D32;color:white}
+
+/* ── ITIN edit ── */
+.itin-edit-btn{opacity:0;background:transparent;border:none;cursor:pointer;font-size:12px;padding:2px 6px;border-radius:4px;color:var(--muted);transition:all .15s;line-height:1}
+.act-row:hover .itin-edit-btn{opacity:1}
+.itin-edit-btn:hover{background:var(--teal4);color:var(--teal)}
+.act-top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:4px}
+
+/* ── PACKING edit ── */
+.pack-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
+.pack-add-btn{background:var(--teal4);border:1px solid var(--teal);color:var(--teal);font-size:9px;font-weight:600;padding:2px 8px;border-radius:6px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.pack-add-btn:hover{background:var(--teal);color:white}
+.pack-del-btn{background:transparent;border:none;cursor:pointer;color:var(--border);font-size:12px;padding:0 2px;transition:color .15s;line-height:1}
+.pack-del-btn:hover{color:var(--red)}
+.pack-row{display:grid;grid-template-columns:16px 1fr repeat(4,30px);gap:5px;align-items:center;padding:4px 0;border-bottom:1px solid #F8FFFE;font-size:11px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--white);padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;border-left:3px solid var(--teal2);box-shadow:0 8px 24px #0005;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .person-grid{grid-template-columns:1fr 1fr}
+  .booking-grid{grid-template-columns:1fr}
+  .day-sub{display:none}
+  .dual-currency{grid-template-columns:1fr 20px 1fr}
+  table{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🇹🇭 TRIP PLANNER — PRIVATE</div>
+    <h1 class="hero-title">Thailand Trip <span>2026</span></h1>
+    <p class="hero-meta">9–17 Mei 2026 &nbsp;·&nbsp; Tama, Evan, Ken, Chando &nbsp;·&nbsp; Pattaya & Bangkok</p>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span id="sync-status" class="sync-badge sync-connecting">Menghubungkan ke database…</span>
+      <button onclick="openKursModal()" class="kurs-btn">
+        <span>💱</span>
+        <span>1 THB = <strong id="kurs-display">531</strong> IDR</span>
+        <span style="font-size:9px;opacity:.7">Tap untuk ubah</span>
+      </button>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-chips">
+        <div class="chip"><span class="chip-dot"></span>9 Hari 8 Malam</div>
+        <div class="chip"><span class="chip-dot"></span>Pattaya 9–12 Mei</div>
+        <div class="chip"><span class="chip-dot"></span>Bangkok 12–17 Mei</div>
+        <div class="chip"><span class="chip-dot"></span>4 Orang</div>
+      </div>
+    </div>
+
+    <!-- Kurs Modal -->
+    <div id="kurs-overlay" onclick="closeKursModal()" style="display:none;position:fixed;inset:0;background:#0009;z-index:9000"></div>
+    <div id="kurs-modal" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9001;background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px 40px;box-shadow:0 -8px 40px #0004">
+      <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px"></div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px">Ubah Kurs THB → IDR</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Sesuaikan dengan kurs hari ini sebelum input pengeluaran</div>
+      <label style="font-size:11px;font-weight:600;color:var(--sub);display:block;margin-bottom:6px">1 THB = ... IDR</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <input type="number" id="kursInput" value="531" min="1"
+          style="flex:1;font-size:28px;font-weight:700;font-family:'Fira Code',monospace;color:var(--teal);background:var(--teal4);border:2px solid var(--teal);border-radius:10px;padding:12px 16px;outline:none;width:100%"
+          inputmode="decimal" placeholder="531">
+        <span style="font-size:16px;font-weight:600;color:var(--text)">IDR</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+        <button onclick="setKurs(525)" class="kurs-preset">525</button>
+        <button onclick="setKurs(530)" class="kurs-preset">530</button>
+        <button onclick="setKurs(531)" class="kurs-preset">531 (now)</button>
+        <button onclick="setKurs(535)" class="kurs-preset">535</button>
+        <button onclick="setKurs(540)" class="kurs-preset">540</button>
+        <button onclick="setKurs(545)" class="kurs-preset">545</button>
+      </div>
+      <button onclick="applyKurs()" style="width:100%;padding:14px;background:var(--teal);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">✓ Simpan Kurs</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nav-btn active"  onclick="show('itinerary',this)">📅 Itinerary</button>
+    <button class="nav-btn" onclick="show('kuliner',this)">🍽 Kuliner</button>
+    <button class="nav-btn" onclick="show('tips',this)">📌 Tips</button>
+    <button class="nav-btn" onclick="show('booking',this)">📑 Booking</button>
+    <button class="nav-btn" onclick="show('expense',this)">💰 Expenses</button>
+    <button class="nav-btn" onclick="show('summary',this)">📊 Summary</button>
+    <button class="nav-btn" onclick="show('budget',this)">🎯 Budget</button>
+    <button class="nav-btn" onclick="show('packing',this)">🎒 Packing</button>
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════
+     ITINERARY
+══════════════════════════════════════ -->
+<div id="itinerary" class="section active">
+  <div class="sec-hdr">
+    <div class="sec-title">Itinerary</div>
+    <div class="sec-sub">Jadwal lengkap 9–17 Mei · <span style="background:#FFFBEB;color:#92400E;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600">⚠ kuning</span> = perlu perhatian &nbsp; <span style="background:#EFF6FF;color:#1D4ED8;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600">ALT</span> = alternatif tanpa booking</div>
+  </div>
+  <div id="itin-body"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     KULINER
+══════════════════════════════════════ -->
+<div id="kuliner" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Panduan Kuliner</div>
+    <div class="sec-sub">17 restoran pilihan — semua no pork · harga dalam IDR (prioritas) & THB</div>
+  </div>
+
+  <div class="city-div"><span class="city-pill">📍 PATTAYA</span></div>
+  <div class="k-grid" id="kuliner-pattaya"></div>
+
+  <div class="city-div"><span class="city-pill">📍 BANGKOK</span></div>
+  <div class="k-grid" id="kuliner-bangkok"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TIPS
+══════════════════════════════════════ -->
+<div id="tips" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Tips & Info Penting</div>
+    <div class="sec-sub">Booking wajib, alternatif, jersey, Muay Thai, dan tips praktis Thailand</div>
+  </div>
+  <div class="tips-grid" id="tips-grid"></div>
+  <div class="quick-ref">
+    <div class="quick-ref-title">📞 NOMOR PENTING & QUICK REFERENCE</div>
+    <div class="ref-grid">
+      <div class="ref-item"><div class="ref-label">Krua Laew Tae R-Rom</div><div class="ref-val">+66 90 987 1101</div></div>
+      <div class="ref-item"><div class="ref-label">Lucky Seafood Bangkok</div><div class="ref-val">+66 94 965 1881</div></div>
+      <div class="ref-item"><div class="ref-label">KAKA Sport Jersey</div><div class="ref-val">+66 87 673 2658</div></div>
+      <div class="ref-item"><div class="ref-label">Tiket Muay Thai</div><div class="ref-val">muaytix.com</div></div>
+      <div class="ref-item"><div class="ref-label">Rajadamnern Stadium</div><div class="ref-val">rajadamnern.com</div></div>
+      <div class="ref-item"><div class="ref-label">Kurs Referensi Saat Ini</div><div class="ref-val" id="kurs-ref">1 THB = Rp 531</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     BOOKING
+══════════════════════════════════════ -->
+<div id="booking" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Booking List</div>
+    <div class="sec-sub">Status semua booking trip</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">+ TAMBAH BOOKING</span></div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group"><label class="fl">Tipe</label>
+          <select class="fi" id="b-tipe"><option>Flight</option><option>Hotel</option><option>Transport</option><option>Activity</option><option>Restaurant</option><option>Lainnya</option></select>
+        </div>
+        <div class="form-group half"><label class="fl">Nama</label><input type="text" class="fi" id="b-nama" placeholder="misal: CGK → KUL"></div>
+        <div class="form-group"><label class="fl">Tanggal</label><input type="text" class="fi" id="b-tgl" placeholder="9 Mei 11:10"></div>
+        <div class="form-group"><label class="fl">Provider</label><input type="text" class="fi" id="b-prov" placeholder="Malaysia Airlines"></div>
+        <div class="form-group"><label class="fl">Status</label>
+          <select class="fi" id="b-status"><option>Confirmed</option><option>Booked</option><option>Pending</option><option>Open</option></select>
+        </div>
+        <div class="form-group"><label class="fl">PIC</label>
+          <select class="fi" id="b-pic"><option value="">-</option><option>Tama</option><option>Evan</option><option>Ken</option><option>Chando</option></select>
+        </div>
+        <div class="form-group wide"><label class="fl">Notes</label><input type="text" class="fi" id="b-notes" placeholder="opsional"></div>
+      </div>
+      <div class="flex-end"><button class="btn btn-teal" onclick="addBooking()">➕ Tambah</button></div>
+    </div>
+  </div>
+  <div class="booking-grid" id="booking-grid" style="max-height:520px;overflow-y:auto;padding-right:4px"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EXPENSE TRACKER
+══════════════════════════════════════ -->
+<div id="expense" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Expense Tracker</div>
+    <div class="sec-sub">Input <strong>IDR</strong> (prioritas) atau THB — satu diisi, yang lain auto-konversi berdasarkan kurs</div>
+  </div>
+
+  <!-- Add form -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">+ TAMBAH PENGELUARAN</span></div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group"><label class="fl">Tanggal</label><input type="date" class="fi" id="e-date" value="2026-05-09"></div>
+        <div class="form-group"><label class="fl">Kota</label>
+          <select class="fi" id="e-kota"><option>Pattaya</option><option>Bangkok</option><option>Jakarta</option><option>Lainnya</option></select>
+        </div>
+        <div class="form-group"><label class="fl">Kategori</label>
+          <select class="fi" id="e-kat"><option>Flight</option><option>Hotel</option><option>Transport</option><option>Food</option><option>Activity</option><option>Nightlife</option><option>Shopping</option><option>Misc</option></select>
+        </div>
+        <div class="form-group"><label class="fl">Dibayar Oleh</label>
+          <select class="fi" id="e-bayar"><option>Tama</option><option>Evan</option><option>Ken</option><option>Chando</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group wide"><label class="fl">Deskripsi</label><input type="text" class="fi" id="e-desc" placeholder="misal: Makan malam di Thipsamai Pad Thai"></div>
+      </div>
+
+      <!-- DUAL CURRENCY — IDR PRIORITAS -->
+      <div class="form-row">
+        <div class="form-group half">
+          <label class="fl">Jumlah (isi salah satu)</label>
+          <div class="dual-currency">
+            <div>
+              <input type="number" class="fi fi-idr" id="e-idr" placeholder="Rp 0" oninput="syncExp('idr')">
+              <div class="currency-hint hint-idr">🟢 IDR — prioritas</div>
+            </div>
+            <div class="dual-sep">⇄</div>
+            <div>
+              <input type="number" class="fi fi-thb" id="e-thb" placeholder="0 THB" oninput="syncExp('thb')">
+              <div class="currency-hint hint-thb">🟡 THB</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="fl">Dibagi Ke (Ctrl+klik multi)</label>
+          <select class="fi" id="e-split" multiple style="height:68px">
+            <option selected>Tama</option><option selected>Evan</option><option selected>Ken</option><option selected>Chando</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Metode</label>
+          <select class="fi" id="e-metode"><option>Card</option><option>Cash THB</option><option>Cash IDR</option><option>Transfer</option></select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Notes (opsional)</label>
+          <input type="text" class="fi" id="e-notes" placeholder="">
+        </div>
+      </div>
+      <div class="flex-end"><button class="btn btn-teal" onclick="addExpense()">➕ Tambah</button></div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">SEMUA PENGELUARAN</span>
+      <span class="card-title" id="exp-badge">Total: Rp 0</span>
+    </div>
+    <div class="table-wrap scrollable">
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th><th>Kota</th><th>Kategori</th><th>Deskripsi</th>
+            <th>Total IDR</th><th>Total THB</th>
+            <th>Per orang IDR</th><th>Per orang THB</th>
+            <th>Dibayar</th><th>Split</th><th>Metode</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="exp-tbody">
+          <tr><td colspan="12" class="empty">Belum ada pengeluaran</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="fw6">TOTAL</td>
+            <td id="foot-idr" class="mono fw6">Rp 0</td>
+            <td id="foot-thb" class="mono fw6">0 THB</td>
+            <td colspan="6"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SUMMARY
+══════════════════════════════════════ -->
+<div id="summary" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Summary & Settlement</div>
+    <div class="sec-sub">Siapa sudah bayar berapa, siapa masih hutang ke siapa</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card dark"><div class="stat-label">TOTAL TRIP</div><div class="stat-val" id="s-idr">Rp 0</div><div class="stat-sub" id="s-thb">0 THB</div></div>
+    <div class="stat-card dark"><div class="stat-label">KEWAJIBAN / ORANG</div><div class="stat-val" id="s-per-idr">Rp 0</div><div class="stat-sub" id="s-per-thb">0 THB</div></div>
+    <div class="stat-card"><div class="stat-label">JUMLAH TRANSAKSI</div><div class="stat-val" id="s-count">0</div><div class="stat-sub">pengeluaran</div></div>
+    <div class="stat-card"><div class="stat-label">BELUM LUNAS</div><div class="stat-val" id="s-unsettled">0</div><div class="stat-sub">orang</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">STATUS PER ORANG</span></div>
+    <div class="card-body" style="max-height:340px;overflow-y:auto"><div class="person-grid" id="person-cards"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">💸 SIAPA UTANG KE SIAPA</span></div>
+    <div class="card-body" id="settle-list" style="max-height:280px;overflow-y:auto"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">BREAKDOWN PER KATEGORI</span></div>
+    <div class="table-wrap scrollable">
+      <table>
+        <thead><tr><th>Kategori</th><th>Total IDR</th><th>Total THB</th><th>% dari total</th><th>Per orang IDR</th></tr></thead>
+        <tbody id="kat-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Settlement payment form -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">📋 LOG PEMBAYARAN SETTLEMENT</span>
+      <span class="card-title" id="settle-log-count">0 pembayaran</span>
+    </div>
+    <div style="overflow-x:auto;max-height:360px;overflow-y:auto" id="settlement-log-body">
+      <div class="empty">Belum ada pembayaran settlement tercatat</div>
+    </div>
+  </div>
+
+  <div class="card" id="settle-form-card">
+    <div class="card-header"><span class="card-title">+ CATAT PEMBAYARAN BARU</span></div>
+    <div class="card-body">
+      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">Kalau sudah ada yang bayar hutang, catat di sini biar balance update otomatis.</p>
+      <div class="form-row">
+        <div class="form-group"><label class="fl">Dari (yang bayar)</label>
+          <select class="fi" id="st-dari"><option>Evan</option><option>Ken</option><option>Chando</option><option>Tama</option></select>
+        </div>
+        <div class="form-group"><label class="fl">Ke (yang nerima)</label>
+          <select class="fi" id="st-ke"><option>Tama</option><option>Evan</option><option>Ken</option><option>Chando</option></select>
+        </div>
+        <div class="form-group">
+          <label class="fl">Jumlah</label>
+          <div class="dual-currency">
+            <div>
+              <input type="number" class="fi fi-idr" id="st-idr" placeholder="Rp 0" oninput="syncSt('idr')">
+              <div class="currency-hint hint-idr">IDR</div>
+            </div>
+            <div class="dual-sep">⇄</div>
+            <div>
+              <input type="number" class="fi fi-thb" id="st-thb" placeholder="THB" oninput="syncSt('thb')">
+              <div class="currency-hint hint-thb">THB</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group"><label class="fl">Keterangan</label><input type="text" class="fi" id="st-desc" placeholder="misal: transfer gopay"></div>
+      </div>
+      <div class="flex-end"><button class="btn btn-gold" onclick="addSettlement()">💳 Catat</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     BUDGET
+══════════════════════════════════════ -->
+<div id="budget" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Budget Plan</div>
+    <div class="sec-sub">Set budget per kategori — input <strong>IDR</strong> (prioritas) atau THB, satu diisi yang lain auto-konversi</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">📊 OVERALL TRIP</span></div>
+    <div class="card-body" id="overall-budget"></div>
+  </div>
+  <div id="person-budgets"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PACKING
+══════════════════════════════════════ -->
+<div id="packing" class="section">
+  <div class="sec-hdr">
+    <div class="sec-title">Packing List</div>
+    <div class="sec-sub">Centang per orang — progress tersimpan di browser ini</div>
+  </div>
+  <div class="stats-grid" style="margin-bottom:14px">
+    <div class="stat-card" id="ps-tama"><div class="stat-label">TAMA</div><div class="stat-val">0%</div><div class="stat-sub">0 / 0</div></div>
+    <div class="stat-card" id="ps-evan"><div class="stat-label">EVAN</div><div class="stat-val">0%</div><div class="stat-sub">0 / 0</div></div>
+    <div class="stat-card" id="ps-ken"><div class="stat-label">KEN</div><div class="stat-val">0%</div><div class="stat-sub">0 / 0</div></div>
+    <div class="stat-card" id="ps-chando"><div class="stat-label">CHANDO</div><div class="stat-val">0%</div><div class="stat-sub">0 / 0</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">CHECKLIST</span>
+      <span style="font-size:10px;color:var(--muted);font-family:'Fira Code',monospace">Tama &nbsp; Evan &nbsp; Ken &nbsp; Chando</span>
+    </div>
+    <div class="card-body" id="packing-body"></div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+<div class="toast" id="toast"></div>
+
+
+<!-- ── OVERLAY (shared) ── -->
+<div class="bs-overlay" id="bs-overlay" onclick="closeBS()"></div>
+
+<!-- ── MAPS EDIT SHEET ── -->
+<div class="bs-sheet" id="maps-sheet">
+  <div class="bs-handle"></div>
+  <div class="bs-title">📍 Link Google Maps</div>
+  <div class="bs-sub" id="maps-sheet-sub">Isi link Google Maps untuk destinasi ini</div>
+  <label style="font-size:11px;font-weight:600;color:var(--sub);display:block;margin-bottom:6px">Paste link dari Google Maps</label>
+  <input type="url" id="maps-input" class="fi" placeholder="https://maps.app.goo.gl/..." style="font-size:13px;padding:10px 12px"
+    inputmode="url">
+  <div style="font-size:10px;color:var(--muted);margin-top:6px">
+    Cara dapat link: buka Google Maps → cari tempat → tap Share → Copy link
+  </div>
+  <div class="bs-actions">
+    <button class="btn btn-outline" onclick="closeBS()">Batal</button>
+    <button class="btn btn-teal" onclick="saveMapsLink()">✓ Simpan</button>
+  </div>
+  <div style="margin-top:10px;text-align:center">
+    <button onclick="clearMapsLink()" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer">Hapus link</button>
+  </div>
+</div>
+
+<!-- ── ITIN EDIT SHEET ── -->
+<div class="bs-sheet" id="itin-sheet">
+  <div class="bs-handle"></div>
+  <div class="bs-title">✏️ Edit Aktivitas</div>
+  <div class="bs-sub" id="itin-sheet-ctx" style="background:var(--teal4);border-radius:6px;padding:6px 10px;margin-bottom:14px;font-size:11px;color:var(--teal)"></div>
+  <div class="form-row">
+    <div class="form-group"><label class="fl">Waktu</label>
+      <input type="text" class="fi" id="ie-time" placeholder="09:00" style="font-family:'Fira Code',monospace">
+    </div>
+    <div class="form-group wide"><label class="fl">Judul Aktivitas</label>
+      <input type="text" class="fi" id="ie-title" placeholder="Nama aktivitas">
+    </div>
+    <div class="form-group wide"><label class="fl">Detail / Catatan</label>
+      <textarea class="fi" id="ie-detail" rows="2" style="resize:none;font-size:12px"></textarea>
+    </div>
+    <div class="form-group"><label class="fl">Est. IDR (opsional)</label>
+      <input type="text" class="fi" id="ie-idr" placeholder="misal: 159,300">
+    </div>
+    <div class="form-group"><label class="fl">Kategori</label>
+      <select class="fi" id="ie-kat">
+        <option value="food">🍽 Food</option>
+        <option value="bar">🍺 Bar Chill</option>
+        <option value="explore">🚶 Explore</option>
+        <option value="jersey">⚽ Jersey</option>
+        <option value="muay">🥊 Muay Thai</option>
+        <option value="travel">✈ Travel</option>
+      </select>
+    </div>
+    <div class="form-group wide"><label class="fl">⚠ Warning (opsional)</label>
+      <input type="text" class="fi" id="ie-warn" placeholder="misal: TUTUP SENIN">
+    </div>
+    <div class="form-group wide"><label class="fl">ALT: Alternatif (opsional)</label>
+      <input type="text" class="fi" id="ie-alt" placeholder="misal: ALT: Makan di sebelah">
+    </div>
+    <div class="form-group wide"><label class="fl">Label Michelin (opsional)</label>
+      <input type="text" class="fi" id="ie-mic" placeholder="misal: Bib Gourmand">
+    </div>
+  </div>
+  <div class="bs-actions">
+    <button class="btn btn-outline" onclick="closeBS()">Batal</button>
+    <button class="btn btn-teal" onclick="saveItinEdit()">✓ Simpan</button>
+  </div>
+  <div style="margin-top:10px;display:flex;justify-content:center">
+    <button onclick="deleteItinAct()" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer">🗑 Hapus aktivitas ini</button>
+  </div>
+</div>
+
+<!-- ── PACKING ADD ITEM SHEET ── -->
+<div class="bs-sheet" id="pack-sheet">
+  <div class="bs-handle"></div>
+  <div class="bs-title">➕ Tambah Item Packing</div>
+  <div class="bs-sub">Item baru akan muncul di semua kolom orang</div>
+  <div class="form-row">
+    <div class="form-group wide"><label class="fl">Nama Item</label>
+      <input type="text" class="fi" id="pack-new-item" placeholder="misal: Sunglasses">
+    </div>
+    <div class="form-group wide"><label class="fl">Kategori</label>
+      <select class="fi" id="pack-new-sec">
+        <option>👕 Pakaian</option>
+        <option>🧴 Toiletries</option>
+        <option>📱 Electronics</option>
+        <option>📄 Dokumen</option>
+        <option>📦 Misc</option>
+      </select>
+    </div>
+  </div>
+  <div class="bs-actions">
+    <button class="btn btn-outline" onclick="closeBS()">Batal</button>
+    <button class="btn btn-teal" onclick="addPackItem()">✓ Tambah</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONSTANTS & STATE
+// ═══════════════════════════════════════
+const MEMBERS = ['Tama','Evan','Ken','Chando'];
+const CATS    = ['Flight','Hotel','Transport','Food','Activity','Nightlife','Shopping','Misc'];
+const TMAP_EXP = {Flight:'tag-flight',Hotel:'tag-hotel',Transport:'tag-transport',Food:'tag-food',Activity:'tag-activity',Nightlife:'tag-nightlife',Shopping:'tag-shopping',Misc:'tag-misc'};
+const TMAP_BOOK = {Flight:'tag-flight',Hotel:'tag-hotel',Transport:'tag-transport',Activity:'tag-activity',Restaurant:'tag-food',Lainnya:'tag-misc'};
+
+let kurs        = 531;
+let expenses    = {};
+let settlements = {};
+let budgets     = {};
+let bookings    = {};
+let packState   = {};
+let itinMaps    = {};
+let itinEdits   = {};
+let kulinerMaps = {};
+
+// Firebase helpers (available after 'fbready')
+
+// ═══════════════════════════════════════
+// SYNC STATUS UI
+// ═══════════════════════════════════════
+function setSyncStatus(status) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  const map = {
+    connecting: {txt:'Menghubungkan ke database…', cls:'sync-connecting'},
+    live:       {txt:'● Live — semua perubahan tersimpan otomatis', cls:'sync-live'},
+    error:      {txt:'⚠ Gagal terhubung — data hanya tersimpan lokal', cls:'sync-error'},
+  };
+  const s = map[status] || map.connecting;
+  el.textContent = s.txt;
+  el.className = 'sync-badge ' + s.cls;
+}
+
+// ═══════════════════════════════════════
+// FIREBASE INIT & LISTENERS
+// ═══════════════════════════════════════
+function initFirebase() {
+  const db = window._db;
+  if (!db) { setSyncStatus('error'); return; }
+  setSyncStatus('connecting');
+
+  // Force cache & connection — critical for fast mobile connect
+  db.ref('/').keepSynced(true);
+
+  // Show live/offline status via Firebase's own connection detection
+  db.ref('.info/connected').on('value', snap => {
+    setSyncStatus(snap.val() === true ? 'live' : 'connecting');
+  });
+
+  // ── Single root listener — one round-trip, no cascading re-renders ──
+  db.ref('/').on('value', snap => {
+    const d = snap.val() || {};
+    let needRenderAll      = false;
+    let needRenderItin     = false;
+    let needRenderKuliner  = false;
+    let needRenderPacking  = false;
+    let needRenderBudget   = false;
+    let needRenderBooking  = false;
+
+    // kurs
+    if (d.kurs && d.kurs !== kurs) {
+      kurs = d.kurs;
+      const inp = document.getElementById('kursInput');
+      if (inp) inp.value = kurs;
+      const disp = document.getElementById('kurs-display');
+      if (disp) disp.textContent = kurs.toLocaleString('id-ID');
+      const ref2 = document.getElementById('kurs-ref');
+      if (ref2) ref2.textContent = `1 THB = Rp ${kurs.toLocaleString('id-ID')}`;
+      needRenderAll = true;
+    }
+
+    // expenses
+    const newExp = JSON.stringify(d.expenses || {});
+    if (newExp !== JSON.stringify(expenses)) {
+      expenses = d.expenses || {};
+      needRenderAll = true;
+    }
+
+    // settlements
+    const newSet = JSON.stringify(d.settlements || {});
+    if (newSet !== JSON.stringify(settlements)) {
+      settlements = d.settlements || {};
+      needRenderAll = true;
+    }
+
+    // budgets
+    if (d.budgets) {
+      budgets = d.budgets;
+      needRenderBudget = true;
+    } else if (!Object.keys(budgets).length) {
+      initDefaultBudgets();
+    }
+
+    // bookings
+    if (d.bookings) {
+      bookings = d.bookings;
+      needRenderBooking = true;
+    } else if (!Object.keys(bookings).length) {
+      seedDefaultBookings();
+    }
+
+    // packing
+    if (d.packing) {
+      packState = d.packing;
+      needRenderPacking = true;
+    } else if (!Object.keys(packState).length) {
+      initDefaultPacking();
+    }
+
+    // customPackItems
+    if (d.customPackItems) {
+      Object.entries(d.customPackItems).forEach(([sec, items]) => {
+        if (Array.isArray(items)) PACK_ITEMS[sec] = items;
+      });
+      needRenderPacking = true;
+    }
+
+    // itinMaps + itinEdits
+    const newIM = JSON.stringify(d.itinMaps || {});
+    const newIE = JSON.stringify(d.itinEdits || {});
+    if (newIM !== JSON.stringify(itinMaps) || newIE !== JSON.stringify(itinEdits)) {
+      itinMaps  = d.itinMaps  || {};
+      itinEdits = d.itinEdits || {};
+      needRenderItin = true;
+    }
+
+    // kulinerMaps
+    const newKM = JSON.stringify(d.kulinerMaps || {});
+    if (newKM !== JSON.stringify(kulinerMaps)) {
+      kulinerMaps = d.kulinerMaps || {};
+      needRenderKuliner = true;
+    }
+
+    // ── Render only what changed ──────────────────────────────
+    if (needRenderAll)     { renderExpenses(); renderSummary(); }
+    if (needRenderBudget || needRenderAll)   renderBudget();
+    if (needRenderBooking) renderBooking();
+    if (needRenderPacking) { renderPacking(); }
+    if (needRenderItin)    renderItinerary();
+    if (needRenderKuliner) renderKuliner();
+
+    // Seed expenses if completely empty
+    if (!d.expenses) seedDefaultExpenses();
+
+  }, err => {
+    console.error('Firebase error:', err);
+    setSyncStatus('error');
+  });
+}
+
+function initDefaultBudgets() {
+  budgets = {};
+  MEMBERS.forEach(m => {
+    budgets[m] = {Flight:null,Hotel:null,Transport:null,Food:null,Activity:null,Nightlife:null,Shopping:null,Misc:null};
+  });
+  fbSet('budgets', budgets);
+}
+
+function initDefaultPacking() {
+  const PACK_ITEMS = {
+    '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans/pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
+    '🧴 Toiletries':['Toothbrush & paste','Deodorant','Sunscreen','Shampoo (travel)','Face wash','Razor'],
+    '📱 Electronics':['Phone + charger','Power bank','Universal adapter','Earphones','Camera (optional)'],
+    '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirmation','Travel insurance','Cash THB','Cash IDR','ATM/Credit card','Copy of passport (photo)'],
+    '📦 Misc':['Umbrella / raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
+  };
+  packState = {};
+  Object.values(PACK_ITEMS).flat().forEach(item => {
+    packState[item] = {Tama:false,Evan:false,Ken:false,Chando:false};
+  });
+  fbSet('packing', packState);
+}
+
+function seedDefaultBookings() {
+  // intentionally empty — start from scratch
+}
+
+function seedDefaultExpenses() {
+  // intentionally empty — start from scratch
+}
+
+// ═══════════════════════════════════════
+// FIREBASE HELPERS
+// ═══════════════════════════════════════
+function fbSet(path, data)    { const db=window._db; if(db) db.ref(path).set(data); }
+function fbPush(path, data)   { const db=window._db; if(db) return db.ref(path).push(data); }
+function fbRemove(path)       { const db=window._db; if(db) db.ref(path).remove(); }
+function fbUpdate(path, data) { const db=window._db; if(db) db.ref(path).update(data); }
+
+// ═══════════════════════════════════════
+// KURS
+// ═══════════════════════════════════════
+function updateKurs(v) {
+  kurs = parseFloat(v) || 531;
+  document.getElementById('kurs-ref').textContent = `1 THB = Rp ${kurs.toLocaleString('id-ID')}`;
+  const d = document.getElementById('kurs-display');
+  if (d) d.textContent = kurs.toLocaleString('id-ID');
+  fbSet('kurs', kurs);
+}
+
+function openKursModal() {
+  document.getElementById('kursInput').value = kurs;
+  document.getElementById('kurs-overlay').style.display = 'block';
+  document.getElementById('kurs-modal').style.display   = 'block';
+  setTimeout(() => document.getElementById('kursInput').focus(), 100);
+}
+function closeKursModal() {
+  document.getElementById('kurs-overlay').style.display = 'none';
+  document.getElementById('kurs-modal').style.display   = 'none';
+}
+function setKurs(v) {
+  document.getElementById('kursInput').value = v;
+}
+function applyKurs() {
+  const v = parseFloat(document.getElementById('kursInput').value);
+  if (!v || v < 100) { toast('Kurs tidak valid!', 'err'); return; }
+  updateKurs(v);
+  renderAll();
+  closeKursModal();
+  toast(`Kurs diupdate: 1 THB = Rp ${v.toLocaleString('id-ID')} ✓`);
+}
+
+// ═══════════════════════════════════════
+// CURRENCY SYNC
+// ═══════════════════════════════════════
+function syncExp(src) {
+  const idr = document.getElementById('e-idr');
+  const thb = document.getElementById('e-thb');
+  if (src==='idr' && idr.value) thb.value = (parseFloat(idr.value)/kurs).toFixed(0);
+  else if (src==='thb' && thb.value) idr.value = Math.round(parseFloat(thb.value)*kurs);
+}
+function syncSt(src) {
+  const idr = document.getElementById('st-idr');
+  const thb = document.getElementById('st-thb');
+  if (src==='idr' && idr.value) thb.value = (parseFloat(idr.value)/kurs).toFixed(0);
+  else if (src==='thb' && thb.value) idr.value = Math.round(parseFloat(thb.value)*kurs);
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+const fmt  = (n) => n==null ? '-' : 'Rp ' + Math.round(n).toLocaleString('id-ID');
+const fmtT = (n) => n==null ? '-' : Math.round(n).toLocaleString('id-ID') + ' THB';
+const expList  = () => Object.entries(expenses).map(([k,v]) => ({...v, _key:k})).sort((a,b) => a.date > b.date ? 1 : -1);
+const settList = () => Object.entries(settlements).map(([k,v]) => ({...v, _key:k})).sort((a,b) => a.date > b.date ? 1 : -1);
+const bookList = () => Object.entries(bookings).map(([k,v]) => ({...v, _key:k}));
+
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderLeftColor = type==='err' ? 'var(--red)' : 'var(--teal2)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════
+// EXPENSE
+// ═══════════════════════════════════════
+function addExpense() {
+  const idrV = parseFloat(document.getElementById('e-idr').value);
+  const thbV = parseFloat(document.getElementById('e-thb').value);
+  const desc = document.getElementById('e-desc').value.trim();
+  if (!idrV && !thbV) { toast('Isi IDR atau THB dulu!','err'); return; }
+  if (!desc) { toast('Deskripsi tidak boleh kosong!','err'); return; }
+  const totalIdr = idrV || Math.round(thbV*kurs);
+  const totalThb = thbV || Math.round(idrV/kurs);
+  const splitOpts = document.getElementById('e-split');
+  const split = Array.from(splitOpts.selectedOptions).map(o=>o.value);
+  if (!split.length) { toast('Pilih minimal 1 orang!','err'); return; }
+  const n = split.length;
+  const entry = {
+    date: document.getElementById('e-date').value,
+    kota: document.getElementById('e-kota').value,
+    kat:  document.getElementById('e-kat').value,
+    desc, totalIdr, totalThb,
+    perIdr: Math.round(totalIdr/n),
+    perThb: Math.round(totalThb/n),
+    dibayar: document.getElementById('e-bayar').value,
+    split,
+    metode: document.getElementById('e-metode').value,
+    notes: document.getElementById('e-notes').value,
+  };
+  fbPush('expenses', entry);
+  ['e-idr','e-thb','e-desc','e-notes'].forEach(id => document.getElementById(id).value='');
+  toast('Pengeluaran ditambahkan ✓');
+}
+
+function delExp(key) {
+  if (!confirm('Hapus pengeluaran ini?')) return;
+  fbRemove('expenses/' + key);
+  toast('Dihapus');
+}
+
+function renderExpenses() {
+  const list = expList();
+  const totalIdr = list.reduce((s,e)=>s+e.totalIdr,0);
+  const totalThb = list.reduce((s,e)=>s+e.totalThb,0);
+  document.getElementById('exp-badge').textContent = `Total: ${fmt(totalIdr)}`;
+  document.getElementById('foot-idr').textContent  = fmt(totalIdr);
+  document.getElementById('foot-thb').textContent  = fmtT(totalThb);
+  const tbody = document.getElementById('exp-tbody');
+  if (!list.length) { tbody.innerHTML='<tr><td colspan="12" class="empty">Belum ada pengeluaran</td></tr>'; return; }
+  tbody.innerHTML = list.map(e => `
+    <tr>
+      <td class="mono" style="font-size:10px;white-space:nowrap">${e.date}</td>
+      <td>${e.kota}</td>
+      <td><span class="tag ${TMAP_EXP[e.kat]||'tag-misc'}">${e.kat}</span></td>
+      <td style="max-width:150px">${e.desc}${e.notes?`<br><span style="color:var(--muted);font-size:9px">${e.notes}</span>`:''}</td>
+      <td><div class="money-primary">${fmt(e.totalIdr)}</div><div style="font-size:9px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.totalThb)}</div></td>
+      <td><div class="money-primary">${fmt(e.perIdr)}</div><div style="font-size:9px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.perThb)}</div></td>
+      <td class="fw6">${e.dibayar}</td>
+      <td style="font-size:10px">${Array.isArray(e.split)?e.split.join(', '):e.split}</td>
+      <td style="font-size:10px">${e.metode}</td>
+      <td><button class="btn btn-red btn-sm" onclick="delExp('${e._key}')">✕</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════════════════════════════
+// SUMMARY
+// ═══════════════════════════════════════
+function calcSummary() {
+  const list = expList();
+  const stList = settList();
+  const totalIdr = list.reduce((s,e)=>s+e.totalIdr,0);
+  const totalThb = list.reduce((s,e)=>s+e.totalThb,0);
+  const kewIdr = totalIdr/MEMBERS.length;
+  const kewThb = totalThb/MEMBERS.length;
+
+  const paid={}, owed={};
+  MEMBERS.forEach(m=>{paid[m]=0;owed[m]=0;});
+  list.forEach(e=>{
+    paid[e.dibayar]=(paid[e.dibayar]||0)+e.totalIdr;
+    const split = Array.isArray(e.split)?e.split:e.split.split(',').map(s=>s.trim());
+    const share = e.totalIdr/split.length;
+    split.forEach(m=>{owed[m]=(owed[m]||0)+share;});
+  });
+  const balance={};
+  MEMBERS.forEach(m=>{balance[m]=paid[m]-owed[m];});
+
+  // apply settlements
+  const bal2={...balance};
+  stList.forEach(s=>{bal2[s.dari]=(bal2[s.dari]||0)+s.idr; bal2[s.ke]=(bal2[s.ke]||0)-s.idr;});
+
+  const katIdr={};
+  CATS.forEach(k=>{katIdr[k]=0;});
+  list.forEach(e=>{katIdr[e.kat]=(katIdr[e.kat]||0)+e.totalIdr;});
+
+  return {totalIdr,totalThb,kewIdr,kewThb,paid,owed,balance,bal2,katIdr};
+}
+
+function renderSummary() {
+  const d = calcSummary();
+  document.getElementById('s-idr').textContent    = fmt(d.totalIdr);
+  document.getElementById('s-thb').textContent    = fmtT(d.totalThb);
+  document.getElementById('s-per-idr').textContent= fmt(d.kewIdr);
+  document.getElementById('s-per-thb').textContent= fmtT(d.kewThb);
+  document.getElementById('s-count').textContent  = expList().length;
+  const unsettled = MEMBERS.filter(m=>Math.abs(d.bal2[m])>100).length;
+  document.getElementById('s-unsettled').textContent = unsettled;
+
+  // person cards
+  document.getElementById('person-cards').innerHTML = MEMBERS.map(m=>{
+    const sisa=d.bal2[m];
+    const cls=sisa>100?'pos':sisa<-100?'neg':'zero';
+    const lbl=sisa>100?'ditalangin / piutang':sisa<-100?'hutang / perlu bayar':'Lunas ✓';
+    return `<div class="p-card">
+      <div class="p-card-top">
+        <div class="p-avatar">${m[0]}</div>
+        <div class="p-name">${m}</div>
+      </div>
+      <div class="p-card-body">
+        <div class="p-row"><span class="p-row-label">Dibayar</span><div><div class="p-row-val">${fmt(d.paid[m])}</div><div class="p-row-sub">${fmtT(d.paid[m]/kurs)}</div></div></div>
+        <div class="p-row"><span class="p-row-label">Kewajiban</span><div><div class="p-row-val">${fmt(d.owed[m])}</div><div class="p-row-sub">${fmtT(d.owed[m]/kurs)}</div></div></div>
+        <div class="p-row"><span class="p-row-label">Balance</span><div><div class="p-row-val ${cls}">${sisa>0?'+':''}${fmt(sisa)}</div><div class="p-row-sub">${sisa>0?'+':''}${fmtT(sisa/kurs)}</div></div></div>
+        <div class="p-row"><span class="p-row-label">Status</span><span class="p-row-val ${cls}" style="font-size:10px">${lbl}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // settlement suggestion (siapa utang ke siapa)
+  const sl = document.getElementById('settle-list');
+  const negM = MEMBERS.map(m=>({m,v:d.bal2[m]})).filter(x=>x.v<-100).map(x=>({...x}));
+  const posM = MEMBERS.map(m=>({m,v:d.bal2[m]})).filter(x=>x.v>100).map(x=>({...x}));
+  if (!negM.length && !posM.length) {
+    sl.innerHTML='<div class="empty" style="color:var(--green)">✅ Semua sudah lunas!</div>';
+  } else {
+    const txns=[];
+    let ni=0,pi=0;
+    while(ni<negM.length && pi<posM.length){
+      const amt=Math.min(-negM[ni].v, posM[pi].v);
+      if(amt>100) txns.push({from:negM[ni].m,to:posM[pi].m,idr:amt});
+      negM[ni].v+=amt; posM[pi].v-=amt;
+      if(Math.abs(negM[ni].v)<100) ni++;
+      if(Math.abs(posM[pi].v)<100) pi++;
+    }
+    sl.innerHTML = txns.length ? txns.map(t=>`
+      <div class="settle-row">
+        <div style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px">
+          ${t.from}<span class="settle-arrow">→</span>${t.to}
+        </div>
+        <div style="text-align:right">
+          <div class="settle-amt">${fmt(t.idr)}</div>
+          <div class="settle-amt-sub">${fmtT(t.idr/kurs)}</div>
+        </div>
+      </div>`).join('')
+    : '<div class="empty" style="color:var(--green)">✅ Semua sudah lunas!</div>';
+  }
+
+  // kat breakdown
+  const total=d.totalIdr||1;
+  document.getElementById('kat-tbody').innerHTML = CATS.map(k=>{
+    const v=d.katIdr[k]||0;
+    return `<tr>
+      <td><span class="tag ${TMAP_EXP[k]||'tag-misc'}">${k}</span></td>
+      <td><div class="money-primary">${v>0?fmt(v):'-'}</div></td>
+      <td style="font-size:10px;color:var(--muted);font-family:'Fira Code',monospace">${v>0?fmtT(v/kurs):'-'}</td>
+      <td class="mono">${v>0?(v/total*100).toFixed(1)+'%':'-'}</td>
+      <td><div class="money-primary">${v>0?fmt(v/MEMBERS.length):'-'}</div></td>
+    </tr>`;
+  }).join('');
+
+  renderSettlementLog();
+}
+
+// ═══════════════════════════════════════
+// SETTLEMENT LOG — proper card, editable
+// ═══════════════════════════════════════
+function addSettlement() {
+  const dari = document.getElementById('st-dari').value;
+  const ke   = document.getElementById('st-ke').value;
+  const idrV = parseFloat(document.getElementById('st-idr').value);
+  const thbV = parseFloat(document.getElementById('st-thb').value);
+  const desc = document.getElementById('st-desc').value.trim();
+  if (dari===ke) { toast('Dari dan Ke tidak bisa sama!','err'); return; }
+  const idr = idrV || Math.round(thbV*kurs);
+  if (!idr||idr<=0) { toast('Isi jumlah dulu!','err'); return; }
+  fbPush('settlements', {
+    dari, ke, idr,
+    thb: Math.round(idr/kurs),
+    desc,
+    date: new Date().toISOString().slice(0,10),
+    createdAt: Date.now(),
+  });
+  ['st-idr','st-thb','st-desc'].forEach(id=>document.getElementById(id).value='');
+  toast('Pembayaran tercatat ✓');
+}
+
+function delSettlement(key) {
+  if (!confirm('Hapus catatan pembayaran ini?')) return;
+  fbRemove('settlements/' + key);
+  toast('Catatan dihapus');
+}
+
+function editSettlement(key) {
+  const s = settlements[key];
+  if (!s) return;
+  document.getElementById('st-dari').value = s.dari;
+  document.getElementById('st-ke').value   = s.ke;
+  document.getElementById('st-idr').value  = s.idr;
+  document.getElementById('st-thb').value  = s.thb;
+  document.getElementById('st-desc').value = s.desc||'';
+  // scroll to form
+  document.getElementById('settle-form-card').scrollIntoView({behavior:'smooth',block:'start'});
+  // delete the old one so user just re-submits
+  fbRemove('settlements/' + key);
+  toast('Edit — ubah dan submit lagi ✓');
+}
+
+function renderSettlementLog() {
+  const list = settList();
+  const el   = document.getElementById('settlement-log-body');
+  const badge = document.getElementById('settle-log-count');
+  if (badge) badge.textContent = list.length + ' pembayaran';
+  if (!list.length) {
+    el.innerHTML = '<div class="empty">Belum ada pembayaran settlement tercatat</div>';
+    return;
+  }
+  el.innerHTML = `
+    <table style="width:100%;border-collapse:separate;border-spacing:0;font-size:12px">
+      <thead>
+        <tr>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:left;font-family:'Fira Code',monospace;font-size:9px">Tanggal</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:left;font-family:'Fira Code',monospace;font-size:9px">Dari</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;font-family:'Fira Code',monospace;font-size:9px">→</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:left;font-family:'Fira Code',monospace;font-size:9px">Ke</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:right;font-family:'Fira Code',monospace;font-size:9px">Jumlah IDR</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:right;font-family:'Fira Code',monospace;font-size:9px">Jumlah THB</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;text-align:left;font-family:'Fira Code',monospace;font-size:9px">Keterangan</th>
+          <th style="background:var(--navy);color:var(--teal2);padding:8px 10px;font-family:'Fira Code',monospace;font-size:9px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${list.map((s,i) => `
+          <tr style="${i%2===0?'background:#F8FFFE':''}">
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;font-family:'Fira Code',monospace;font-size:10px;white-space:nowrap">${s.date||'-'}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;font-weight:600">${s.dari}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;color:var(--red);font-weight:700;text-align:center">→</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;font-weight:600">${s.ke}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;text-align:right;font-weight:700;color:var(--red);font-family:'Fira Code',monospace">${fmt(s.idr)}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;text-align:right;font-size:10px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(s.thb||s.idr/kurs)}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6;font-size:11px;color:var(--sub)">${s.desc||'-'}</td>
+            <td style="padding:7px 10px;border-bottom:1px solid #F0F7F6">
+              <div style="display:flex;gap:4px">
+                <button class="btn btn-outline btn-sm" onclick="editSettlement('${s._key}')">✏</button>
+                <button class="btn btn-red btn-sm" onclick="delSettlement('${s._key}')">✕</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+      <tfoot style="position:sticky;bottom:0;z-index:3">
+        <tr>
+          <td colspan="4" style="background:var(--gold3);padding:8px 10px;font-weight:700;box-shadow:0 -2px 0 var(--gold2)">TOTAL SETTLED</td>
+          <td style="background:var(--gold3);padding:8px 10px;text-align:right;font-weight:700;font-family:'Fira Code',monospace">${fmt(list.reduce((s,x)=>s+x.idr,0))}</td>
+          <td style="background:var(--gold3);padding:8px 10px;text-align:right;font-size:10px;font-family:'Fira Code',monospace;color:var(--muted)">${fmtT(list.reduce((s,x)=>s+(x.thb||x.idr/kurs),0))}</td>
+          <td colspan="2" style="background:var(--gold3)"></td>
+        </tr>
+      </tfoot>
+    </table>`;
+}
+
+// ═══════════════════════════════════════
+// BUDGET
+// ═══════════════════════════════════════
+function renderBudget() {
+  const d = calcSummary();
+  const totalBudIdr = MEMBERS.reduce((s,m)=>s+CATS.reduce((s2,k)=>s2+(budgets[m]?budgets[m][k]||0:0),0),0);
+  const totalAct = d.totalIdr;
+  const isOver = totalAct>totalBudIdr && totalBudIdr>0;
+  document.getElementById('overall-budget').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">TOTAL BUDGET</div><div class="stat-val">${fmt(totalBudIdr)}</div><div class="stat-sub">${fmtT(totalBudIdr/kurs)}</div></div>
+      <div class="stat-card"><div class="stat-label">TOTAL ACTUAL</div><div class="stat-val">${fmt(totalAct)}</div><div class="stat-sub">${fmtT(totalAct/kurs)}</div></div>
+      <div class="stat-card" style="border-left:3px solid ${isOver?'var(--red)':'var(--green)'}">
+        <div class="stat-label">SISA BUDGET</div>
+        <div class="stat-val ${isOver?'text-neg':'text-pos'}">${isOver?'-':'+'}${fmt(Math.abs(totalBudIdr-totalAct))}</div>
+        <div class="stat-sub">${isOver?'⚠ Over budget':'✓ Masih aman'}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('person-budgets').innerHTML = MEMBERS.map(m=>{
+    const mb = budgets[m]||{};
+    const personAct={};
+    CATS.forEach(k=>{personAct[k]=0;});
+    expList().forEach(e=>{
+      const split=Array.isArray(e.split)?e.split:e.split.split(',').map(s=>s.trim());
+      if(split.includes(m)) personAct[e.kat]=(personAct[e.kat]||0)+e.perIdr;
+    });
+    const totBud=CATS.reduce((s,k)=>s+(mb[k]||0),0);
+    const totAct=CATS.reduce((s,k)=>s+(personAct[k]||0),0);
+    return `<div class="card">
+      <div class="card-header">
+        <span class="card-title">👤 ${m.toUpperCase()}</span>
+        <span class="card-title">Budget: ${fmt(totBud)} &nbsp;|&nbsp; Actual: ${fmt(totAct)}</span>
+      </div>
+      <div class="card-body">
+        ${CATS.map(k=>{
+          const bv=mb[k]||0;
+          const av=personAct[k]||0;
+          const pct=bv>0?Math.min(av/bv*100,100):av>0?100:0;
+          const over=av>bv&&bv>0;
+          return `<div class="budget-item">
+            <div class="budget-item-top">
+              <div class="budget-item-left">
+                <div class="budget-item-label">${k}</div>
+                <div class="budget-inputs">
+                  <input type="number" class="budget-idr-input" value="${bv||''}" placeholder="Rp budget"
+                    onchange="updBudget('${m}','${k}',this.value,'idr')">
+                  <span style="font-size:9px;color:var(--muted)">IDR</span>
+                  <span style="font-size:9px;color:var(--muted)">/</span>
+                  <input type="number" class="budget-thb-input" value="${bv?Math.round(bv/kurs):''}" placeholder="THB"
+                    onchange="updBudget('${m}','${k}',this.value,'thb')">
+                  <span style="font-size:9px;color:var(--muted)">THB</span>
+                </div>
+              </div>
+              <div class="budget-item-right">Actual: ${fmt(av)}<br><span style="font-size:9px">${fmtT(av/kurs)}</span></div>
+            </div>
+            <div class="bar-bg"><div class="bar-fill ${over?'over':''}" style="width:${pct.toFixed(1)}%"></div></div>
+            <div class="budget-item-status ${over?'over':''}">
+              ${bv>0?(over?`⚠ Over ${fmt(av-bv)}`:`✓ Sisa ${fmt(bv-av)}`):(av>0?'⚠ Tidak ada budget set':'—')}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updBudget(m, k, v, unit) {
+  const n = parseFloat(v);
+  if (!budgets[m]) budgets[m]={};
+  budgets[m][k] = (!isNaN(n)&&n>0) ? (unit==='thb'?Math.round(n*kurs):n) : null;
+  fbSet('budgets', budgets);
+}
+
+// ═══════════════════════════════════════
+// BOOKING
+// ═══════════════════════════════════════
+function addBooking() {
+  const nama = document.getElementById('b-nama').value.trim();
+  if (!nama) { toast('Nama booking tidak boleh kosong!','err'); return; }
+  fbPush('bookings', {
+    tipe: document.getElementById('b-tipe').value,
+    nama, tgl: document.getElementById('b-tgl').value,
+    prov: document.getElementById('b-prov').value,
+    status: document.getElementById('b-status').value,
+    pic: document.getElementById('b-pic').value,
+    notes: document.getElementById('b-notes').value,
+  });
+  ['b-nama','b-tgl','b-prov','b-notes'].forEach(id=>document.getElementById(id).value='');
+  toast('Booking ditambahkan ✓');
+}
+
+function delBooking(key) {
+  if (!confirm('Hapus booking ini?')) return;
+  fbRemove('bookings/'+key); toast('Dihapus');
+}
+
+function updBookingStatus(key, v) {
+  fbUpdate('bookings/'+key, {status:v});
+}
+
+function renderBooking() {
+  const list = bookList();
+  const SMAP = {Confirmed:'s-confirmed',Booked:'s-booked',Pending:'s-pending',Open:'s-open'};
+  document.getElementById('booking-grid').innerHTML = list.map(b=>`
+    <div class="b-card">
+      <div class="b-card-top">
+        <div>
+          <span class="tag ${TMAP_BOOK[b.tipe]||'tag-misc'}" style="margin-bottom:4px;display:inline-block">${b.tipe}</span>
+          <div class="b-name">${b.nama}</div>
+        </div>
+        <select class="fi" style="width:95px;font-size:10px;padding:3px 6px" onchange="updBookingStatus('${b._key}',this.value)">
+          ${['Confirmed','Booked','Pending','Open'].map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      ${b.tgl   ?`<div class="b-detail">📅 ${b.tgl}</div>`:''}
+      ${b.prov  ?`<div class="b-detail">🏢 ${b.prov}</div>`:''}
+      ${b.pic   ?`<div class="b-detail">👤 PIC: ${b.pic}</div>`:''}
+      ${b.notes ?`<div class="b-detail" style="font-style:italic">💬 ${b.notes}</div>`:''}
+      <div style="margin-top:8px;display:flex;justify-content:flex-end">
+        <button class="btn btn-red btn-sm" onclick="delBooking('${b._key}')">✕ Hapus</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// PACKING
+// ═══════════════════════════════════════
+const PACK_ITEMS = {
+  '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans/pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
+  '🧴 Toiletries':['Toothbrush & paste','Deodorant','Sunscreen','Shampoo (travel)','Face wash','Razor'],
+  '📱 Electronics':['Phone + charger','Power bank','Universal adapter','Earphones','Camera (optional)'],
+  '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirmation','Travel insurance','Cash THB','Cash IDR','ATM/Credit card','Copy of passport (photo)'],
+  '📦 Misc':['Umbrella / raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
+};
+
+function togglePack(item, person) {
+  if (!packState[item]) packState[item]={Tama:false,Evan:false,Ken:false,Chando:false};
+  packState[item][person] = !packState[item][person];
+  fbSet('packing', packState);
+  updatePackStats();
+}
+
+function updatePackStats() {
+  const all=Object.values(PACK_ITEMS).flat();
+  const total=all.length;
+  MEMBERS.forEach(m=>{
+    const done=all.filter(item=>packState[item]&&packState[item][m]).length;
+    const pct=Math.round(done/total*100);
+    const el=document.getElementById('ps-'+m.toLowerCase());
+    if(!el) return;
+    el.querySelector('.stat-val').textContent=pct+'%';
+    el.querySelector('.stat-sub').textContent=`${done} / ${total}`;
+    el.style.borderLeft=`3px solid ${pct===100?'var(--green)':pct>50?'var(--teal)':'var(--border)'}`;
+  });
+}
+
+function renderPacking() {
+  document.getElementById('packing-body').innerHTML = Object.entries(PACK_ITEMS).map(([sec,items]) => `
+    <div class="pack-section">
+      <div class="pack-section-hdr">
+        <div class="pack-sec-title" style="margin:0;border:none;padding:0">${sec}</div>
+        <button class="pack-add-btn" onclick="openPackAdd('${sec.replace(/'/g,"\\'")}')">+ Tambah</button>
+      </div>
+      <div class="pack-row" style="grid-template-columns:16px 1fr repeat(4,30px)">
+        <div></div><div></div>
+        ${MEMBERS.map(m=>`<div class="pack-person-hdr">${m[0]}</div>`).join('')}
+      </div>
+      ${items.map(item => `
+        <div class="pack-row" style="grid-template-columns:16px 1fr repeat(4,30px)">
+          <button class="pack-del-btn" title="Hapus item" onclick="delPackItem('${sec.replace(/'/g,"\\'")}','${item.replace(/'/g,"\\'")}')">✕</button>
+          <div>${item}</div>
+          ${MEMBERS.map(m=>`
+            <div class="pack-check">
+              <input type="checkbox" ${packState[item]&&packState[item][m]?'checked':''}
+                onchange="togglePack('${item.replace(/'/g,"\\'")}','${m}')">
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`).join('');
+  updatePackStats();
+}
+
+// ═══════════════════════════════════════
+// NAV
+
+// ═══════════════════════════════════════
+// STATIC RENDER DATA
+// ═══════════════════════════════════════
+const ITIN = [
+  {city:'PATTAYA — 9–12 MEI', days:[
+    {day:'Sabtu, 9 Mei',sub:'Hari pertama — tiba malam',acts:[
+      {t:'11:10',e:'✈',title:'Terbang CGK → KUL → BKK',detail:'Transit Kuala Lumpur 1j40m · Tiba Suvarnabhumi 17:20',kat:'travel'},
+      {t:'18:00',e:'🚗',title:'Transfer ke Unixx Pratumnak',detail:'Private car · +/- 1.5–2 jam · langsung ke Pratumnak Hill',kat:'travel'},
+      {t:'20:30',e:'🍽',title:'Makan Malam: Krua Rom Mai Thai',detail:'Halal certified · Tom Yum, crispy fish, prawn salad · ada musholla · Sukhumvit Rd',kat:'food',idr:'212,000',mic:'Halal'},
+      {t:'22:30',e:'🍺',title:'Chill: Hermes Skybar Pratumnak',detail:'Rooftop view Koh Larn & Pattaya Bay · cocktail & beer · suasana tenang',kat:'bar',idr:'159,000'},
+    ]},
+    {day:'Minggu, 10 Mei',sub:'Santai + Bib Gourmand day',acts:[
+      {t:'09:30',e:'☕',title:'Sarapan: Cafe sekitar Cosy Beach',detail:'Banyak cafe kecil di Pratumnak Hill',kat:'food',idr:'79,500'},
+      {t:'11:00',e:'🏊',title:'Pool & Relax di Unixx',detail:'Pool lt 6 + sky garden lt 37 & 41 · view laut langsung',kat:'explore'},
+      {t:'13:00',e:'🍽',title:'Makan Siang: La Voi Premium Beef',detail:'Sup sapi premium · 100% no pork · Jomtien area',kat:'food',idr:'185,850',mic:'Bib Gourmand',warn:'TUTUP SENIN — manfaatkan hari ini!',alt:'ALT: Mum Aroi Naklua — seafood view laut, tanpa booking'},
+      {t:'15:30',e:'🚶',title:'Explore Naklua Area',detail:'Utara Pattaya · lebih autentik & lokal · pasar lokal · kurang turis',kat:'explore'},
+      {t:'19:00',e:'🍽',title:'Makan Malam: Krua Laew Tae R-Rom',detail:'Seafood ultra segar · cumi tinta hitam, Tom Yum ikan · BOOKING: +66 90 987 1101',kat:'food',idr:'265,500',mic:'Bib Gourmand',warn:'WAJIB BOOKING seminggu sebelumnya! Bisa tutup kalau tidak ada tangkapan.',alt:'ALT: Pupen Seafood Jomtien — seafood legendaris, tanpa booking'},
+      {t:'21:30',e:'🍺',title:'Ngebar: Beach Bar Jomtien',detail:'Duduk pinggir pantai · beer 80–120 THB · angin laut · banyak pilihan bar',kat:'bar',idr:'159,000'},
+    ]},
+    {day:'Senin, 11 Mei',sub:'Explore + malam terakhir Pattaya',acts:[
+      {t:'09:30',e:'☕',title:'Sarapan: Delivery / Minimart Unixx',detail:'Santai dulu · order delivery atau beli di minimart Unixx',kat:'food',idr:'53,100'},
+      {t:'10:30',e:'🍽',title:'Makan Siang: Lung Shall Kitchen',detail:'Hidden gem Thai autentik · harga super murah · datang awal, cepat penuh',kat:'food',idr:'106,200',mic:'Bib Gourmand',warn:'BUKA JUM–MIN SAJA! Hari ini Senin — pakai alternatif di bawah.',alt:'ALT: Som Tum Villa Third Rd — masakan Isan/Northeastern, langsung datang'},
+      {t:'13:30',e:'🌊',title:'Jalan Santai: Pratumnak Hill & Cosy Beach',detail:'View terbaik Pattaya dari bukit · duduk santai tepi laut',kat:'explore'},
+      {t:'15:30',e:'💆',title:'Massage Thai Tradisional',detail:'Foot massage atau full body · 300–400 THB/jam · area Pratumnak–Jomtien',kat:'explore',idr:'185,850'},
+      {t:'19:00',e:'🍽',title:'Makan Malam: Pladids',detail:"Chef's table seafood · 3 meja saja · menu musiman tiap 3 bulan · pengalaman unik",kat:'food',idr:'318,600',mic:'Bib Gourmand',warn:'Reservasi via DM @pladids.fisherman — sangat terbatas!',alt:'ALT: Jomtien Night Market — street food lokal, langsung datang'},
+      {t:'21:30',e:'🍺',title:'Malam Terakhir: Horizon Hilton / The Rooftop Holiday Inn',detail:'View Pattaya Bay · DJ santai · cocktail & beer · lounge bukan dugem',kat:'bar',idr:'212,400'},
+    ]},
+    {day:'Selasa, 12 Mei',sub:'Pindah ke Bangkok',acts:[
+      {t:'09:00',e:'☕',title:'Sarapan + Check-out Unixx',detail:'Cafe sekitar Pratumnak · beresin barang sebelum transfer',kat:'food',idr:'79,500'},
+      {t:'11:00',e:'🚗',title:'Transfer Pattaya → Bangkok',detail:'Private car · +/- 2 jam · tiba Airbnb Intharama 9 sekitar 13:00',kat:'travel'},
+      {t:'15:00',e:'🏠',title:'Check-in Airbnb Intharama 9',detail:'Soi Phu Hiran, Phaya Thai · dekat BTS Saphan Khwai & Ari · istirahat, segar-segaran',kat:'explore'},
+      {t:'18:00',e:'🍽',title:'Makan Malam: Thipsamai Pad Thai',detail:'Pad Thai terbaik Bangkok · versi wrapped omelette wajib dicoba · dekat Giant Swing',kat:'food',idr:'159,300',mic:'Bib Gourmand',warn:'TUTUP SELASA — cek ulang jadwal atau geser ke hari lain!'},
+      {t:'21:00',e:'🍺',title:'Bar Pertama Bangkok: Dumbo Ari',detail:'Rooftop rustic atas gedung tua kawasan Ari · live jazz harian · dekat Airbnb',kat:'bar',idr:'212,400'},
+    ]},
+  ]},
+  {city:'BANGKOK — 12–17 MEI', days:[
+    {day:'Rabu, 13 Mei',sub:'Brunch Ari + Jersey Chatuchak',acts:[
+      {t:'10:00',e:'☕',title:'Brunch: Cafe Hopping Area Ari',detail:'Kawasan cafe specialty hits lokal · kopi, pastry · 5 menit dari Airbnb',kat:'food',idr:'106,200'},
+      {t:'13:00',e:'🍽',title:'Makan Siang: Khao Man Gai Jae Yi',detail:'Nasi ayam Hainan legendaris · buka pagi–siang saja · murah · tutup Senin',kat:'food',idr:'79,500',mic:'Bib Gourmand'},
+      {t:'15:00',e:'⚽',title:'Jersey Bola: Chatuchak — All Around Football Shop',detail:'JJ Market lt 4 gedung merah vintage · jersey retro & new · harga mulai 200 THB · buka setiap hari',kat:'jersey',idr:'212,400'},
+      {t:'19:00',e:'🍽',title:'Makan Malam: Jeh O Chula',detail:'Tom Yum Mama legendary · Banthat Thong · porsi sharing · worth the queue',kat:'food',idr:'159,300'},
+      {t:'21:00',e:'🍺',title:'Bar: Chinatown Yacht Club',detail:'Shophouse bersejarah 3 lantai Soi Nana · rooftop urban garden tropis · DJ chill',kat:'bar',idr:'212,400'},
+    ]},
+    {day:'Kamis, 14 Mei',sub:'Old Bangkok + Jay Fai + Muay Thai opsi',acts:[
+      {t:'09:00',e:'🍗',title:'Sarapan: Polo Fried Chicken',detail:'Ayam goreng bawang putih crispy · Soi Polo Lumphini · tutup Senin',kat:'food',idr:'106,200',mic:'Michelin Rec.'},
+      {t:'11:00',e:'🏯',title:'Explore: Wat Arun & Riverside',detail:'Feri menyeberangi Chao Phraya · Wat Arun dari dekat · jalan santai riverside',kat:'explore',idr:'53,100'},
+      {t:'13:30',e:'🍛',title:'Makan Siang: Khao Gaeng Jek Pui',detail:'Curry rice legendaris Chinatown · 45 THB / Rp 23.895 per porsi · buka sore mulai 14:00',kat:'food',idr:'53,100',mic:'Michelin Rec.'},
+      {t:'15:00',e:'⚽',title:'Jersey Bola: Soi Chula — KAKA Sport + Sport Center',detail:'Dua toko berdekatan · koleksi lengkap · print nama & nomor di tempat, langsung jadi!',kat:'jersey',idr:'265,500'},
+      {t:'18:00',e:'🦀',title:'Makan Malam: Jay Fai',detail:'Crab omelette legendary · dimasak nenek berkacamata goggle · buka Rabu–Sabtu',kat:'food',idr:'795,000',mic:'1 Michelin Star',warn:'Booking via website atau antri jam 09:00 pagi di hari H!',alt:'ALT: Rod Fai Srinakarin Night Market — pasar malam vintage & food, tanpa booking'},
+      {t:'20:00',e:'🥊',title:'OPSI: Muay Thai — Rajadamnern Stadium',detail:'Petchyindee Traditional · 5 ronde · fighter lokal · betting legal · tiket dari Rp 849rb · beli via muaytix.com',kat:'muay',idr:'1,007,700',alt:'ALT Sabtu: RWS Fight Night — show terbesar, free beer semua tiket'},
+    ]},
+    {day:'Jumat, 15 Mei',sub:'Relax + Lucky Seafood + Studio Lam',acts:[
+      {t:'10:00',e:'☕',title:'Sarapan Santai: Cafe Area Ari',detail:'Telat bangun · kopi + pastri · jalan kaki dari Airbnb',kat:'food',idr:'106,200'},
+      {t:'12:00',e:'🍜',title:'Makan Siang: Siam Square / MBK area',detail:'Food court atau warung lokal · murah, banyak pilihan',kat:'food',idr:'106,200'},
+      {t:'14:00',e:'💆',title:'Massage Thai + Shopping MBK',detail:'Foot massage 300–400 THB · beli oleh-oleh kecil · jalan santai',kat:'explore',idr:'212,400'},
+      {t:'17:00',e:'🦐',title:'Makan Malam: Lucky Seafood',detail:'Kepiting tumis cabai, cumi kari · seafood segar · Taling Chan · buka sore',kat:'food',idr:'265,500',mic:'Bib Gourmand',warn:'BOOKING: +66 94 965 1881 sebelum berangkat ke Bangkok!',alt:'ALT: Mookata BBQ Thai AYCE — all you can eat, banyak cabang Sukhumvit, tanpa booking'},
+      {t:'20:30',e:'🎵',title:'Bar: Studio Lam — Thonglor',detail:'Bar vinyl legendaris · musik world/indie/jazz dari 6,000+ koleksi vinyl · Thonglor must-go',kat:'bar',idr:'212,400'},
+    ]},
+    {day:'Sabtu, 16 Mei',sub:'Hari terakhir penuh + farewell',acts:[
+      {t:'09:30',e:'🛒',title:'Sarapan + Oleh-oleh: Or Tor Kor Market',detail:'Pasar produk premium Thailand dekat Chatuchak · snack, kopi, bumbu masak',kat:'food',idr:'159,300'},
+      {t:'12:00',e:'🏬',title:'IconSiam + Makan Siang: SookSiam LG',detail:'Mall megah tepi Chao Phraya · SookSiam LG = food court pasar apung ber-AC',kat:'food',idr:'132,750'},
+      {t:'15:00',e:'🧳',title:'Santai Sore / Packing',detail:'Kemas barang · tidur siang · atau jalan-jalan terakhir sekitar Intharama 9',kat:'explore'},
+      {t:'18:00',e:'🎉',title:'Farewell Dinner: Rod Fai Night Market',detail:'Pasar malam vintage · suasana unik · street food bebas pilih',kat:'food',idr:'185,850'},
+      {t:'20:00',e:'🥊',title:'OPSI: Muay Thai RWS Fight Night — SABTU TERBAIK!',detail:'Show TERBESAR Rajadamnern · FREE BEER semua tiket · fighter internasional · mulai 19:00',kat:'muay',idr:'1,007,700',warn:'SABTU = free beer semua kelas tiket! Beli via muaytix.com',alt:'ALT: Tichuca Rooftop Bar — rooftop hutan tropis, view kota, farewell vibes'},
+    ]},
+    {day:'Minggu, 17 Mei',sub:'Hari kepulangan',acts:[
+      {t:'12:00',e:'☕',title:'Brunch Terakhir + Check-out',detail:'Makan ringan sekitar Intharama 9 · beresin barang · checkout Airbnb',kat:'food',idr:'79,500'},
+      {t:'17:00',e:'🚕',title:'Grab ke Suvarnabhumi',detail:'Flight BKK → KUL 19:45 · tiba KL 22:55 · tiba CGK besok 11:20',kat:'travel'},
+    ]},
+  ]},
+];
+
+const KAT_TAG = {food:'tag-food',bar:'tag-bar',explore:'tag-explore',jersey:'tag-jersey',muay:'tag-muay',travel:'tag-travel'};
+
+function renderItinerary() {
+  document.getElementById('itin-body').innerHTML = ITIN.map((sec,si) => `
+    <div class="city-div"><span class="city-pill">📍 ${sec.city}</span></div>
+    ${sec.days.map((day,di) => `
+      <div class="day-block">
+        <div class="day-hdr">
+          <span class="day-name">${day.day}</span>
+          <span class="day-sub">${day.sub}</span>
+        </div>
+        <div class="day-body">
+          ${day.acts.map((a,ai) => {
+            const k = si+'_'+di+'_'+ai;
+            const ov = (itinEdits&&itinEdits[k]) || {};
+            const title  = ov.title  || a.title;
+            const detail = ov.detail || a.detail;
+            const idr    = ov.idr    !== undefined ? ov.idr  : (a.idr||'');
+            const warn   = ov.warn   !== undefined ? ov.warn : (a.warn||'');
+            const alt2   = ov.alt    !== undefined ? ov.alt  : (a.alt||'');
+            const mic    = ov.mic    !== undefined ? ov.mic  : (a.mic||'');
+            const t      = ov.t || a.t;
+            const mapsUrl = (itinMaps&&itinMaps[k]) || '';
+            const titleEsc  = title.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+            const detailEsc = detail.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+            const mapsEsc   = mapsUrl.replace(/'/g,"\\'");
+            return `<div class="act-row">
+              <div class="act-tc"><div class="t-pill">${t}</div></div>
+              <div class="act-ic">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:3px">
+                  <div style="flex:1">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+                      <div class="act-title">${a.e} ${title}</div>
+                      <div class="act-tags" style="flex-shrink:0">
+                        ${idr ? `<span class="money-tag">Rp ${idr}</span>` : ''}
+                        ${mic ? `<span class="tag tag-michelin">✦ ${mic}</span>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                  <button class="itin-edit-btn" title="Edit aktivitas" onclick="openItinEdit('${k}','${t}','${titleEsc}','${detailEsc}','${idr}','${(warn||'').replace(/'/g,"\\'")}','${(alt2||'').replace(/'/g,"\\'")}','${(mic||'').replace(/'/g,"\\'")}','${a.e||''}','${ov.kat||a.kat||'food'}')">✏</button>
+                </div>
+                <div class="act-detail">${detail}</div>
+                ${warn ? `<div class="act-warn">⚠ ${warn}</div>` : ''}
+                ${alt2 ? `<div class="act-alt"><strong>ALT:</strong> ${alt2}</div>` : ''}
+                <div style="margin-top:5px">
+                  ${mapsUrl
+                    ? `<a href="${mapsUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
+                       <button class="maps-edit-btn has-link" style="margin-left:4px" onclick="openMapsEdit('${k}','itin','${mapsEsc}','${titleEsc}')">✎</button>`
+                    : `<button class="maps-edit-btn" onclick="openMapsEdit('${k}','itin','','${titleEsc}')">📍 + Link Maps</button>`
+                  }
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`).join('')}
+  `).join('');
+}
+
+const KULINER_DATA = {
+  pattaya: [
+    {kota:'PATTAYA — HALAL CERTIFIED',nama:'Krua Rom Mai Thai',tags:['Halal Certified'],menu:'Tom Yum, crispy fish, prawn salad, ayam goreng · ada musholla & mukena',harga:'Rp 79.500 – 132.750',booking:false,notes:'Buka setiap hari 10:00–20:00'},
+    {kota:'PATTAYA — JOMTIEN',nama:'La Voi Premium Beef',tags:['Bib Gourmand'],menu:'Sup sapi premium, mix beef noodle, Tom Yum · 100% no pork',harga:'Rp 106.200 – 185.850',booking:false,notes:'TUTUP SENIN · Datang sebelum jam 11'},
+    {kota:'PATTAYA — NA KLUEA',nama:'Krua Laew Tae R-Rom',tags:['Bib Gourmand'],menu:'Cumi tinta hitam, Tom Yum ikan, seafood ultra segar · menu tergantung tangkapan',harga:'Rp 159.000 – 265.500',booking:true,notes:'WAJIB BOOKING: +66 90 987 1101 · min. seminggu sebelumnya'},
+    {kota:'PATTAYA — HIDDEN GEM',nama:'Lung Shall Kitchen',tags:['Bib Gourmand'],menu:'Thai autentik, Fish Tom Yum, Geng Khua Koong · harga super murah',harga:'Rp 53.100 – 106.200',booking:false,notes:'BUKA JUM–MIN SAJA · Datang pagi, cepat penuh!'},
+    {kota:"PATTAYA — CHEF'S TABLE",nama:'Pladids',tags:['Bib Gourmand'],menu:'Seafood musiman sustainable · menu berubah tiap 3 bulan · hanya 3 meja',harga:'Rp 212.400 – 371.700',booking:true,notes:'WAJIB BOOKING via DM @pladids.fisherman · sangat terbatas'},
+  ],
+  bangkok: [
+    {kota:'BANGKOK — GIANT SWING',nama:'Thipsamai Pad Thai',tags:['Bib Gourmand'],menu:'Pad Thai wrapped omelette · Pad Thai original · versi omelette adalah yang terbaik',harga:'Rp 79.500 – 132.750',booking:false,notes:'TUTUP SELASA · Buka pagi–midnight hari lain'},
+    {kota:'BANGKOK — PRATUNAM',nama:'Khao Man Gai Jae Yi',tags:['Bib Gourmand'],menu:'Khao Man Gai (nasi ayam Hainan) · ayam lembut, nasi wangi, saus nendang',harga:'Rp 31.860 – 53.100',booking:false,notes:'Buka pagi–siang, tutup Senin'},
+    {kota:'BANGKOK — BANTHAT THONG',nama:'Jeh O Chula',tags:['Street Food'],menu:'Tom Yum Mama porsi sharing · wajib makan rame-rame · antri tapi worth it',harga:'Rp 79.500 – 159.300',booking:false,notes:'Langsung datang, siap-siap antri'},
+    {kota:'BANGKOK — LUMPHINI',nama:'Polo Fried Chicken',tags:['Michelin Rec.'],menu:'Ayam goreng bawang putih crispy · papaya salad juara · ½ porsi cukup 2 orang',harga:'Rp 79.500 – 132.750',booking:false,notes:'Tutup Senin'},
+    {kota:'BANGKOK — CHINATOWN',nama:'Khao Gaeng Jek Pui',tags:['Michelin Rec.'],menu:'Curry rice Rp 23.895/porsi (45 THB) · beef & chicken & green curry',harga:'Rp 23.895 – 53.100',booking:false,notes:'Buka sore 14:00–19:30'},
+    {kota:'BANGKOK — MAHACHAI RD',nama:'Jay Fai',tags:['1 Michelin Star'],menu:'Crab omelette legendary · Drunken noodle · dimasak nenek ikonik berkacamata goggle',harga:'Rp 530.000 – 795.000',booking:true,notes:'Booking website atau antri jam 09:00 pagi · Buka Rabu–Sabtu'},
+    {kota:'BANGKOK — TALING CHAN',nama:'Lucky Seafood',tags:['Bib Gourmand'],menu:'Kepiting tumis cabai, cumi kari · seafood segar · homemade curry paste',harga:'Rp 159.300 – 265.500',booking:true,notes:'BOOKING: +66 94 965 1881 · Buka Rabu–Minggu sore'},
+    {kota:'BANGKOK — ICONSIAM LG',nama:'SookSiam Food Court',tags:['Street Food'],menu:'Aneka street food lokal terbaik · tematik pasar apung · ber-AC',harga:'Rp 53.100 – 132.750',booking:false,notes:'Langsung datang · Di dalam IconSiam lt. LG'},
+  ],
+};
+
+function renderKuliner() {
+  ['pattaya','bangkok'].forEach(loc => {
+    document.getElementById('kuliner-'+loc).innerHTML = (KULINER_DATA[loc]||[]).map((k,ki) => {
+      const mKey = loc+'_'+ki;
+      const mUrl = (kulinerMaps && kulinerMaps[mKey]) || '';
+      const booking = k.booking;
+      return `<div class="k-card">
+        <div class="k-card-top">
+          <div class="k-city">${k.kota}</div>
+          <div class="k-name">${k.nama}</div>
+          <div class="k-tags">
+            ${k.tags.map(t => {
+              const tc = t.includes('Halal')?'tag-halal':t.includes('Michelin')||t.includes('Bib')?'tag-michelin':'tag-food';
+              return `<span class="tag ${tc}">✦ ${t}</span>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="k-body">
+          <div class="k-menu">${k.menu}</div>
+          <div class="k-price">
+            <span class="idr-badge">IDR</span>
+            <span style="font-size:12px;font-weight:600;color:var(--text)">${k.harga}</span>
+          </div>
+          <div class="${booking?'k-booking':'k-booking ok'}">
+            ${booking ? '⚠ ' : '✓ '}${k.notes}
+          </div>
+          <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            ${mUrl
+              ? `<a href="${mUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
+                 <button class="maps-edit-btn has-link" onclick="openMapsEdit('${mKey}','kuliner','${mUrl.replace(/'/g,"\\'")}','${k.nama.replace(/'/g,"\\'")}')">✎</button>`
+              : `<button class="maps-edit-btn" onclick="openMapsEdit('${mKey}','kuliner','','${k.nama.replace(/'/g,"\\'")}')">📍 + Link Maps</button>`
+            }
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  });
+}
+
+const TIPS_DATA = [
+  {title:'🔴 WAJIB BOOKING SEBELUM BERANGKAT', items:[
+    {label:'Krua Laew Tae R-Rom',detail:'WA/telp: +66 90 987 1101 · Minta booking 4 orang, sebutkan tanggal. Min. seminggu sebelumnya.',meta:'Untuk 10 Mei'},
+    {label:'Pladids Pattaya',detail:'DM Instagram @pladids.fisherman · Hanya 3 meja, sangat terbatas.',meta:'Untuk 11 Mei'},
+    {label:'Lucky Seafood Bangkok',detail:'WA/telp: +66 94 965 1881 · Reservasi 4 orang, sebutkan jam (datang sore mulai 16:00).',meta:'Untuk 15 Mei'},
+    {label:'Jay Fai Bangkok',detail:'Booking via website atau datang jam 09:00 pagi antri langsung. Buka Rabu–Sabtu saja.',meta:'Untuk 14 Mei'},
+  ]},
+  {title:'✅ ALTERNATIF TANPA BOOKING', items:[
+    {label:'Pupen Seafood Jomtien',detail:'Pengganti Krua Laew Tae · seafood segar porsi besar harga lokal · ujung Jomtien Beach',meta:'Walk-in'},
+    {label:'Som Tum Villa Third Rd',detail:'Pengganti Lung Shall Kitchen (Senin tutup) · masakan Isan, tanpa booking',meta:'Walk-in'},
+    {label:'Jomtien Night Market',detail:'Pengganti Pladids · street food lokal murah & ramai · langsung datang malam hari',meta:'Walk-in'},
+    {label:'Rod Fai Night Market',detail:'Pengganti Jay Fai jika tidak dapat booking · pasar malam vintage & food seru',meta:'Walk-in'},
+    {label:'Mookata AYCE',detail:'Pengganti Lucky Seafood · BBQ Thai + shabu all you can eat · banyak cabang Sukhumvit',meta:'Walk-in'},
+  ]},
+  {title:'⚽ JERSEY BOLA — PANDUAN BELANJA', items:[
+    {label:'All Around Football Shop',detail:'Chatuchak JJ Market, Lt 4 Gedung Merah Vintage · jersey retro & current · harga mulai Rp 106rb',meta:'Rabu 13 Mei'},
+    {label:'KAKA Sport Bangkok',detail:'Soi Chulalongkorn dekat Siam · koleksi lengkap · player spec & fan version · bisa request rare',meta:'Kamis 14 Mei'},
+    {label:'Sport Center Football Jersey',detail:'Soi Chulalongkorn berdekatan KAKA · print nama & nomor langsung di tempat, font resmi, cepat jadi',meta:'Kamis 14 Mei'},
+    {label:'Tips Belanja Jersey',detail:'Tanya Fan version vs Player version. Player lebih mahal tapi kualitas jauh lebih baik. Selalu cek jahitan. Bisa tawar kalau beli 2+.',meta:null},
+  ]},
+  {title:'🥊 MUAY THAI — RAJADAMNERN STADIUM', items:[
+    {label:'Kamis 14 Mei: Petchyindee Traditional',detail:'5 ronde · fighter lokal · betting legal · atmosfer autentik. Harga: Rp 849rb (2nd Class) / Rp 1jt (Club) / Rp 1.3jt (Ringside). Mulai 18:00.',meta:'muaytix.com'},
+    {label:'Sabtu 16 Mei: RWS Fight Night ⭐ REKOMENDASI',detail:'Show TERBESAR tiap minggu · FREE BEER semua tiket · fighter internasional. Harga sama, jauh lebih worth it. Mulai 19:00.',meta:'muaytix.com'},
+    {label:'Cara Beli Tiket (gampang!)',detail:'Buka muaytix.com → pilih tanggal → pilih kursi → bayar → QR dikirim ke email. Bisa beli bahkan H-0!',meta:null},
+    {label:'Rekomendasi Kursi',detail:'Club Class = sweet spot. View bagus, nyaman, Rp ±1 juta. Sabtu = free beer SEMUA kelas tiket!',meta:'~Rp 1 juta'},
+  ]},
+  {title:'🚕 TRANSPORTASI & PRAKTIS', items:[
+    {label:'Grab Thailand',detail:'Download sebelum berangkat! Lebih murah & aman vs taksi jalanan. Bisa bayar cash atau kartu.',meta:'Wajib install'},
+    {label:'BTS Skytrain Bangkok',detail:'Untuk Sukhumvit–Siam–Chatuchak. Beli kartu Rabbit Card di stasiun. Airbnb dekat BTS Saphan Khwai.',meta:'Rabbit Card'},
+    {label:'SIM Card Thailand',detail:'Beli AIS Tourist SIM di bandara Suvarnabhumi (arrival hall). Data unlimited 8–10 hari sekitar Rp 133rb–159rb.',meta:'AIS / DTAC'},
+    {label:'Hindari Taksi Tanpa Argo',detail:'Banyak taksi liar di luar bandara yang minta harga selangit. Selalu minta nyalain argo atau pakai Grab.',meta:'Grab > Taksi'},
+  ]},
+  {title:'🍽 TIPS MAKANAN & UMUM', items:[
+    {label:'"Mai Sai Moo" = Tidak Pakai Babi',detail:'Ucapkan ini di restoran untuk memastikan tidak ada babi. Semua resto di list ini sudah aman.',meta:'ไม่ใส่หมู'},
+    {label:'Konversi Harga Cepat',detail:'Kalau lihat harga THB di sana, langsung kali 531 untuk dapat IDR. Misal: 300 THB × 531 = Rp 159.300',meta:'×531'},
+    {label:'Musim Mei',detail:'Panas banget siang hari (35°C+). Bawa sunscreen, topi, pakaian ringan. Hujan sesekali di sore hari.',meta:'Bawa sunscreen'},
+    {label:'Airbnb Bangkok',detail:'Intharama 9, Phaya Thai · 5 menit Grab ke Ari & Chatuchak · dekat BTS Saphan Khwai',meta:'Home base'},
+  ]},
+];
+
+function renderTips() {
+  document.getElementById('tips-grid').innerHTML = TIPS_DATA.map(sec => `
+    <div class="tip-card">
+      <div class="tip-header">${sec.title}</div>
+      ${sec.items.map(item => `
+        <div class="tip-item">
+          <div class="tip-dot"></div>
+          <div>
+            <div class="tip-label">${item.label}</div>
+            <div class="tip-detail">${item.detail}</div>
+            ${item.meta ? `<div class="tip-meta">${item.meta}</div>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+  document.getElementById('kurs-ref').textContent = `1 THB = Rp ${kurs.toLocaleString('id-ID')}`;
+}
+
+
+// ═══════════════════════════════════════
+// BOTTOM SHEET HELPERS
+// ═══════════════════════════════════════
+let _currentBS = null;
+function openBS(sheetId) {
+  _currentBS = sheetId;
+  document.getElementById('bs-overlay').classList.add('open');
+  document.getElementById(sheetId).classList.add('open');
+}
+function closeBS() {
+  if (_currentBS) document.getElementById(_currentBS).classList.remove('open');
+  document.getElementById('bs-overlay').classList.remove('open');
+  _currentBS = null;
+}
+
+// ═══════════════════════════════════════
+// MAPS LINKS  (stored in Firebase: itinMaps / kulinerMaps)
+// ═══════════════════════════════════════
+
+let _mapsCtx    = null; // {key, type ('itin'|'kuliner')}
+
+function openMapsEdit(key, type, currentUrl, label) {
+  _mapsCtx = { key, type };
+  document.getElementById('maps-sheet-sub').textContent = label || 'Tambah link Google Maps';
+  document.getElementById('maps-input').value = currentUrl || '';
+  openBS('maps-sheet');
+  setTimeout(() => document.getElementById('maps-input').focus(), 150);
+}
+
+function saveMapsLink() {
+  if (!_mapsCtx) return;
+  const url = document.getElementById('maps-input').value.trim();
+  if (url && !url.startsWith('http')) { toast('Link harus dimulai dengan http...','err'); return; }
+  const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
+  fbSet(path, url || null);
+  closeBS();
+  toast(url ? '📍 Link Maps disimpan ✓' : 'Link dihapus');
+}
+
+function clearMapsLink() {
+  if (!_mapsCtx) return;
+  const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
+  fbRemove(path);
+  closeBS();
+  toast('Link dihapus');
+}
+
+// ═══════════════════════════════════════
+// ITIN EDIT
+// ═══════════════════════════════════════
+let _itinEditKey = null;
+
+function openItinEdit(key, t, title, detail, idr, warn, alt, mic, emoji, kat) {
+  _itinEditKey = key;
+  document.getElementById('itin-sheet-ctx').textContent = emoji + ' ' + decodeURIComponent(title);
+  document.getElementById('ie-time').value   = t || '';
+  document.getElementById('ie-title').value  = title || '';
+  document.getElementById('ie-detail').value = detail || '';
+  document.getElementById('ie-idr').value    = idr || '';
+  document.getElementById('ie-warn').value   = warn || '';
+  document.getElementById('ie-alt').value    = alt || '';
+  document.getElementById('ie-mic').value    = mic || '';
+  const katSel = document.getElementById('ie-kat');
+  if (kat) { for (let o of katSel.options) { if (o.value===kat) { o.selected=true; break; } } }
+  openBS('itin-sheet');
+}
+
+function saveItinEdit() {
+  if (!_itinEditKey) return;
+  const edit = {
+    t:      document.getElementById('ie-time').value.trim(),
+    title:  document.getElementById('ie-title').value.trim(),
+    detail: document.getElementById('ie-detail').value.trim(),
+    idr:    document.getElementById('ie-idr').value.trim(),
+    warn:   document.getElementById('ie-warn').value.trim(),
+    alt:    document.getElementById('ie-alt').value.trim(),
+    mic:    document.getElementById('ie-mic').value.trim(),
+    kat:    document.getElementById('ie-kat').value,
+  };
+  fbSet('itinEdits/' + _itinEditKey, edit);
+  closeBS();
+  toast('Aktivitas diperbarui ✓');
+}
+
+function deleteItinAct() {
+  if (!_itinEditKey || !confirm('Hapus aktivitas ini dari tampilan?')) return;
+  fbSet('itinEdits/' + _itinEditKey, { _deleted: true });
+  closeBS();
+  toast('Aktivitas disembunyikan');
+}
+
+// ═══════════════════════════════════════
+// PACKING EDIT
+// ═══════════════════════════════════════
+let _packSec = null;
+
+function openPackAdd(sec) {
+  _packSec = sec;
+  document.getElementById('pack-new-item').value = '';
+  // Set dropdown to match sec
+  const sel = document.getElementById('pack-new-sec');
+  for (let o of sel.options) { if (o.value===sec||o.textContent===sec) { o.selected=true; break; } }
+  openBS('pack-sheet');
+  setTimeout(() => document.getElementById('pack-new-item').focus(), 150);
+}
+
+function addPackItem() {
+  const item = document.getElementById('pack-new-item').value.trim();
+  const sec  = document.getElementById('pack-new-sec').value;
+  if (!item) { toast('Nama item tidak boleh kosong!','err'); return; }
+  // Add to PACK_ITEMS in memory
+  if (!PACK_ITEMS[sec]) PACK_ITEMS[sec] = [];
+  if (PACK_ITEMS[sec].includes(item)) { toast('Item sudah ada!','err'); return; }
+  PACK_ITEMS[sec].push(item);
+  // Initialize state for new item
+  if (!packState[item]) packState[item] = {Tama:false,Evan:false,Ken:false,Chando:false};
+  fbSet('packing', packState);
+  // Save custom pack items to Firebase
+  fbSet('customPackItems', PACK_ITEMS);
+  closeBS();
+  renderPacking();
+  toast('Item ditambahkan ✓');
+}
+
+function delPackItem(sec, item) {
+  if (!confirm(`Hapus "${item}" dari packing list?`)) return;
+  if (PACK_ITEMS[sec]) {
+    PACK_ITEMS[sec] = PACK_ITEMS[sec].filter(x => x !== item);
+  }
+  delete packState[item];
+  fbSet('packing', packState);
+  fbSet('customPackItems', PACK_ITEMS);
+  renderPacking();
+  toast('Item dihapus');
+}
+
+// ═══════════════════════════════════════
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:document.querySelector('.nav-wrap').offsetTop,behavior:'smooth'});
+}
+
+function renderAll() {
+  renderExpenses();
+  renderSummary();
+  renderBudget();
+  renderBooking();
+}
+
+// ═══════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════
+
+// Firebase loaded in <head>, DOM ready by end of body — call directly
+renderItinerary();
+renderKuliner();
+renderTips();
+renderPacking();
+initFirebase();
+</script></body>
+</html>
