@@ -886,9 +886,6 @@ function initFirebase() {
   if (!db) { setSyncStatus('error'); return; }
   setSyncStatus('connecting');
 
-  // Force cache & connection — critical for fast mobile connect
-  db.ref('/').keepSynced(true);
-
   // Show live/offline status via Firebase's own connection detection
   db.ref('.info/connected').on('value', snap => {
     setSyncStatus(snap.val() === true ? 'live' : 'connecting');
