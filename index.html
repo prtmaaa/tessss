@@ -509,13 +509,13 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
     <div class="city-div" style="flex:1;margin:0"><span class="city-pill">📍 PATTAYA</span></div>
     <button class="btn btn-teal btn-sm" onclick="openKulinerAdd('pattaya')" style="margin-left:10px;white-space:nowrap">+ Tambah</button>
   </div>
-  <div class="k-grid" id="kuliner-pattaya"></div>
+  <div id="kuliner-pattaya"></div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;margin-top:20px">
     <div class="city-div" style="flex:1;margin:0"><span class="city-pill">📍 BANGKOK</span></div>
     <button class="btn btn-teal btn-sm" onclick="openKulinerAdd('bangkok')" style="margin-left:10px;white-space:nowrap">+ Tambah</button>
   </div>
-  <div class="k-grid" id="kuliner-bangkok"></div>
+  <div id="kuliner-bangkok"></div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -2211,64 +2211,87 @@ function renderKuliner() {
   const filter = window._kulinerFilter || 'semua';
   ['pattaya','bangkok'].forEach(loc => {
     const container = document.getElementById('kuliner-'+loc);
-    const all = [...(KULINER_DATA[loc]||[]), ...(kulinerCustom[loc]||[])];
+    if (!container) return;
+
+    // Merge static + custom, assign local index for edit
+    const staticList = (KULINER_DATA[loc]||[]).map((k, i) => ({...k, _li: i, _custom: false}));
+    const customList = (kulinerCustom[loc]||[]).map((k, i) => ({...k, _li: i, _custom: true}));
+    const all = [...staticList, ...customList];
+
+    // Filter
     const filtered = filter === 'semua' ? all : all.filter(k => k.tipe === filter);
 
-    // Group by tipe for section headers
-    const groups = {};
-    filtered.forEach((k,ki) => {
-      const t = k.tipe||'food';
-      if (!groups[t]) groups[t] = [];
-      groups[t].push({...k, _ki: ki, _custom: !!k._custom});
-    });
+    if (!filtered.length) {
+      container.innerHTML = '<div class="empty" style="padding:20px">Belum ada tempat di kategori ini</div>';
+      return;
+    }
 
-    const tipeLabel = {food:'🍽 Restoran', bar:'🍺 Bar & Nightlife', cafe:'☕ Cafe'};
-    const tipeOrder = ['food','bar','cafe'];
+    // When filtered by type — flat grid, no section headers
+    // When "semua" — group by tipe with section headers
+    if (filter !== 'semua') {
+      container.innerHTML = `<div class="k-grid">${filtered.map(k => mkKCard(k, loc)).join('')}</div>`;
+    } else {
+      const tipeOrder = ['food','bar','cafe'];
+      const tipeLabel = {food:'🍽 Restoran', bar:'🍺 Bar & Nightlife', cafe:'☕ Cafe'};
+      const groups = {};
+      filtered.forEach(k => {
+        const t = k.tipe || 'food';
+        if (!groups[t]) groups[t] = [];
+        groups[t].push(k);
+      });
+      container.innerHTML = tipeOrder
+        .filter(t => groups[t] && groups[t].length)
+        .map(t => `
+          <div class="k-tipe-header">${tipeLabel[t]}</div>
+          <div class="k-grid" style="margin-bottom:4px">
+            ${groups[t].map(k => mkKCard(k, loc)).join('')}
+          </div>`)
+        .join('');
+    }
+  });
+}
 
-    container.innerHTML = tipeOrder.filter(t => groups[t]).map(t => `
-      <div class="k-tipe-header">${tipeLabel[t] || t}</div>
-      <div class="k-grid" style="margin-bottom:8px">
-        ${groups[t].map(k => {
-          const mKey = (k._custom ? 'custom_' : '') + loc+'_'+(k._ki);
-          const _sk  = KULINER_NAME_MAP[k.nama];
-          const mUrl = (_sk && sharedMaps[_sk]) || (kulinerMaps && kulinerMaps[mKey]) || '';
-          const booking = k.booking;
-          const tipeTag = k.tipe==='bar' ? 'tag-bar' : k.tipe==='cafe' ? 'tag-cafe' : 'tag-food';
-          return `<div class="k-card">
-            <div class="k-card-top">
-              <div class="k-city">${k.kota}</div>
-              <div class="k-name">${k.nama}</div>
-              <div class="k-tags">
-                <span class="tag ${tipeTag}">${k.tipe==='bar'?'🍺 Bar':k.tipe==='cafe'?'☕ Cafe':'🍽 Resto'}</span>
-                ${k.tags.map(tt => {
-                  const tc = tt.includes('Halal')?'tag-halal':tt.includes('Michelin')||tt.includes('Bib')?'tag-michelin':'tag-food';
-                  return `<span class="tag ${tc}">✦ ${tt}</span>`;
-                }).join('')}
-              </div>
-              <button class="k-edit-btn" onclick="openKulinerEdit('${loc}',${k._ki},${k._custom||false})">✏ Edit</button>
-            </div>
-            <div class="k-body">
-              <div class="k-menu">${k.menu}</div>
-              <div class="k-price">
-                <span class="idr-badge">IDR</span>
-                <span style="font-size:12px;font-weight:600;color:var(--text)">${k.harga}</span>
-              </div>
-              <div class="${booking?'k-booking':'k-booking ok'}">
-                ${booking ? '⚠ ' : '✓ '}${k.notes}
-              </div>
-              <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                ${mUrl
-                  ? `<a href="${mUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
-                     <button class="maps-edit-btn has-link" onclick="openMapsEdit('${mKey}','kuliner','${mUrl.replace(/'/g,"\\'")}','${k.nama.replace(/'/g,"\\'")}')">✎</button>`
-                  : `<button class="maps-edit-btn" onclick="openMapsEdit('${mKey}','kuliner','','${k.nama.replace(/'/g,"\\'")}')">📍 + Link Maps</button>`
-                }
-              </div>
-            </div>
-          </div>`;
+function mkKCard(k, loc) {
+  const mKey  = (k._custom ? 'c_' : '') + loc + '_' + k._li;
+  const _sk   = KULINER_NAME_MAP[k.nama];
+  const mUrl  = (_sk && sharedMaps[_sk]) || (kulinerMaps && kulinerMaps[mKey]) || '';
+  const booking = k.booking;
+  const tipeTag = k.tipe==='bar' ? 'tag-bar' : k.tipe==='cafe' ? 'tag-cafe' : 'tag-food';
+  const tipeIcon = k.tipe==='bar' ? '🍺 Bar' : k.tipe==='cafe' ? '☕ Cafe' : '🍽 Resto';
+  const nameSafe = (k.nama||'').replace(/'/g,"\\'");
+  const mUrlSafe = mUrl.replace(/'/g,"\\'");
+  return `<div class="k-card">
+    <div class="k-card-top">
+      <div class="k-city">${k.kota}</div>
+      <div class="k-name">${k.nama}</div>
+      <div class="k-tags">
+        <span class="tag ${tipeTag}">${tipeIcon}</span>
+        ${(k.tags||[]).map(tt => {
+          const tc = tt.includes('Halal')?'tag-halal':
+                     (tt.includes('Michelin')||tt.includes('Bib'))?'tag-michelin':'';
+          return tc ? `<span class="tag ${tc}">✦ ${tt}</span>` : `<span class="tag tag-misc">${tt}</span>`;
         }).join('')}
       </div>
-    `).join('');
-  });
+      <button class="k-edit-btn" onclick="openKulinerEdit('${loc}',${k._li},${k._custom})">✏ Edit</button>
+    </div>
+    <div class="k-body">
+      <div class="k-menu">${k.menu}</div>
+      <div class="k-price">
+        <span class="idr-badge">IDR</span>
+        <span style="font-size:12px;font-weight:600;color:var(--text)">${k.harga}</span>
+      </div>
+      <div class="${booking?'k-booking':'k-booking ok'}">
+        ${booking?'⚠ ':'✓ '}${k.notes}
+      </div>
+      <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        ${mUrl
+          ? `<a href="${mUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
+             <button class="maps-edit-btn has-link" style="margin-left:2px" onclick="openMapsEdit('${mKey}','kuliner','${mUrlSafe}','${nameSafe}')">✎</button>`
+          : `<button class="maps-edit-btn" onclick="openMapsEdit('${mKey}','kuliner','','${nameSafe}')">📍 + Link Maps</button>`
+        }
+      </div>
+    </div>
+  </div>`;
 }
 
 const TIPS_DATA = [
