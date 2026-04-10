@@ -237,6 +237,8 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 .city-pill{background:var(--navy);color:var(--teal2);font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.1em;padding:6px 16px;border-radius:20px;white-space:nowrap;font-weight:500}
 .day-block{margin-bottom:14px}
 .day-hdr{background:var(--navy2);border-left:3px solid var(--teal);padding:9px 13px;border-radius:var(--r2) var(--r2) 0 0;display:flex;justify-content:space-between;align-items:center}
+.day-add-btn{background:transparent;border:1px solid #FFFFFF25;color:#A8D4CF;font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;white-space:nowrap}
+.day-add-btn:hover,.day-add-btn:active{background:var(--teal);border-color:var(--teal);color:white}
 .day-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;color:var(--white);letter-spacing:-.2px}
 .day-sub{font-size:10px;color:var(--muted);font-family:'Fira Code',monospace}
 .day-body{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r2) var(--r2);overflow:hidden}
@@ -365,6 +367,20 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 .pack-del-btn{background:transparent;border:none;cursor:pointer;color:var(--border);font-size:12px;padding:0 2px;transition:color .15s;line-height:1}
 .pack-del-btn:hover{color:var(--red)}
 .pack-row{display:grid;grid-template-columns:16px 1fr repeat(4,30px);gap:5px;align-items:center;padding:4px 0;border-bottom:1px solid #F8FFFE;font-size:11px}
+
+
+/* SPLIT BILL UI */
+.split-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.split-chip{display:flex;align-items:center;gap:5px;background:var(--teal4);border:2px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer;transition:all .15s;user-select:none}
+.split-chip.active{background:var(--teal);border-color:var(--teal);color:white}
+.split-chip input[type=checkbox]{display:none}
+.split-chip-name{font-size:12px;font-weight:600}
+.split-method-tabs{display:flex;gap:6px;margin-bottom:10px}
+.split-tab{flex:1;padding:6px;font-size:11px;font-weight:600;border:1.5px solid var(--border);border-radius:6px;background:var(--teal4);color:var(--sub);cursor:pointer;text-align:center;transition:all .15s}
+.split-tab.active{background:var(--teal);border-color:var(--teal);color:white}
+.split-custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.split-custom-item{display:flex;flex-direction:column;gap:3px}
+.split-custom-item label{font-size:10px;font-weight:600;color:var(--sub)}
 
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--white);padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;border-left:3px solid var(--teal2);box-shadow:0 8px 24px #0005;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s}
@@ -558,14 +574,14 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
         <div class="form-group wide"><label class="fl">Deskripsi</label><input type="text" class="fi" id="e-desc" placeholder="misal: Makan malam di Thipsamai Pad Thai"></div>
       </div>
 
-      <!-- DUAL CURRENCY — IDR PRIORITAS -->
+      <!-- DUAL CURRENCY + EXTRA CHARGES -->
       <div class="form-row">
         <div class="form-group half">
-          <label class="fl">Jumlah (isi salah satu)</label>
+          <label class="fl">Subtotal tagihan (isi salah satu)</label>
           <div class="dual-currency">
             <div>
               <input type="number" class="fi fi-idr" id="e-idr" placeholder="Rp 0" oninput="syncExp('idr')">
-              <div class="currency-hint hint-idr">🟢 IDR — prioritas</div>
+              <div class="currency-hint hint-idr">🟢 IDR</div>
             </div>
             <div class="dual-sep">⇄</div>
             <div>
@@ -574,14 +590,108 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="fl">Dibagi Ke (Ctrl+klik multi)</label>
-          <select class="fi" id="e-split" multiple style="height:68px">
-            <option selected>Tama</option><option selected>Evan</option><option selected>Ken</option><option selected>Chando</option>
-          </select>
+        <div class="form-group half">
+          <label class="fl">+ Biaya tambahan <span style="font-weight:400;color:var(--muted)">(pajak / service charge — opsional)</span></label>
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">
+            <div class="split-method-tabs" style="flex:0 0 auto;width:auto;gap:5px;margin-bottom:0">
+              <div class="split-tab active" id="ex-tab-pct"  onclick="setExtraType('pct')" style="padding:5px 10px">% Persen</div>
+              <div class="split-tab"        id="ex-tab-nom"  onclick="setExtraType('nom')" style="padding:5px 10px">Nominal</div>
+              <div class="split-tab"        id="ex-tab-none" onclick="setExtraType('none')" style="padding:5px 10px">Tidak ada</div>
+            </div>
+          </div>
+          <div id="ex-pct-section">
+            <div class="dual-currency">
+              <div>
+                <input type="number" class="fi" id="ex-pct" placeholder="misal: 17" min="0" max="100" oninput="calcExtraCharge()" style="font-size:13px">
+                <div class="currency-hint" style="color:var(--sub)">% dari subtotal</div>
+              </div>
+              <div class="dual-sep" style="padding-bottom:14px">→</div>
+              <div>
+                <input type="text" class="fi" id="ex-pct-result-idr" readonly placeholder="Rp 0" style="background:#F8FFFE;font-size:12px;color:var(--teal);font-weight:600">
+                <div class="currency-hint hint-idr">IDR tambahan</div>
+              </div>
+            </div>
+          </div>
+          <div id="ex-nom-section" style="display:none">
+            <div class="dual-currency">
+              <div>
+                <input type="number" class="fi fi-idr" id="ex-nom-idr" placeholder="Rp 0" oninput="calcExtraCharge()">
+                <div class="currency-hint hint-idr">IDR</div>
+              </div>
+              <div class="dual-sep">⇄</div>
+              <div>
+                <input type="number" class="fi fi-thb" id="ex-nom-thb" placeholder="0 THB" oninput="calcExtraChargeFromThb()">
+                <div class="currency-hint hint-thb">THB</div>
+              </div>
+            </div>
+          </div>
+          <div id="ex-total-row" style="margin-top:6px;padding:7px 10px;background:var(--teal4);border-radius:6px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:var(--sub)">Total (subtotal + biaya tambahan)</span>
+            <span style="font-size:12px;font-weight:700;color:var(--teal)" id="ex-grand-total">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPLIT -->
+      <div class="form-row">
+        <div class="form-group wide">
+          <label class="fl">Dibagi Ke</label>
+          <div class="split-chips">
+            <label class="split-chip active" onclick="toggleSplitChip(this,'Tama')"><span class="split-chip-name">Tama</span></label>
+            <label class="split-chip active" onclick="toggleSplitChip(this,'Evan')"><span class="split-chip-name">Evan</span></label>
+            <label class="split-chip active" onclick="toggleSplitChip(this,'Ken')"><span class="split-chip-name">Ken</span></label>
+            <label class="split-chip active" onclick="toggleSplitChip(this,'Chando')"><span class="split-chip-name">Chando</span></label>
+          </div>
+          <label class="fl" style="margin-bottom:5px;margin-top:8px">Metode Split</label>
+          <div class="split-method-tabs">
+            <div class="split-tab active" id="split-tab-rata"   onclick="setSplitMethod('rata')">⚖ Rata</div>
+            <div class="split-tab"        id="split-tab-custom" onclick="setSplitMethod('custom')">✏ Nominal Custom</div>
+          </div>
+          <!-- CUSTOM SPLIT — dual currency per orang -->
+          <div id="split-custom-section" style="display:none;margin-top:8px">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Isi subtotal per orang sebelum biaya tambahan (IDR atau THB):</div>
+            <div class="split-custom-grid">
+              <div class="split-custom-item">
+                <label>Tama</label>
+                <div class="dual-currency" style="gap:4px">
+                  <div><input type="number" class="fi fi-idr" id="sc-tama-idr" placeholder="Rp" oninput="scSyncCurrency('tama','idr');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                  <div class="dual-sep" style="font-size:9px;padding-bottom:0">⇄</div>
+                  <div><input type="number" class="fi fi-thb" id="sc-tama-thb" placeholder="THB" oninput="scSyncCurrency('tama','thb');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                </div>
+              </div>
+              <div class="split-custom-item">
+                <label>Evan</label>
+                <div class="dual-currency" style="gap:4px">
+                  <div><input type="number" class="fi fi-idr" id="sc-evan-idr" placeholder="Rp" oninput="scSyncCurrency('evan','idr');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                  <div class="dual-sep" style="font-size:9px;padding-bottom:0">⇄</div>
+                  <div><input type="number" class="fi fi-thb" id="sc-evan-thb" placeholder="THB" oninput="scSyncCurrency('evan','thb');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                </div>
+              </div>
+              <div class="split-custom-item">
+                <label>Ken</label>
+                <div class="dual-currency" style="gap:4px">
+                  <div><input type="number" class="fi fi-idr" id="sc-ken-idr" placeholder="Rp" oninput="scSyncCurrency('ken','idr');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                  <div class="dual-sep" style="font-size:9px;padding-bottom:0">⇄</div>
+                  <div><input type="number" class="fi fi-thb" id="sc-ken-thb" placeholder="THB" oninput="scSyncCurrency('ken','thb');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                </div>
+              </div>
+              <div class="split-custom-item">
+                <label>Chando</label>
+                <div class="dual-currency" style="gap:4px">
+                  <div><input type="number" class="fi fi-idr" id="sc-chando-idr" placeholder="Rp" oninput="scSyncCurrency('chando','idr');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                  <div class="dual-sep" style="font-size:9px;padding-bottom:0">⇄</div>
+                  <div><input type="number" class="fi fi-thb" id="sc-chando-thb" placeholder="THB" oninput="scSyncCurrency('chando','thb');updateSplitCustomTotal()" style="padding:5px 6px;font-size:11px"></div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+              <span>Subtotal custom: <span id="sc-total" class="mono fw6">Rp 0</span></span>
+              <span id="sc-diff" style="font-weight:600"></span>
+            </div>
+          </div>
         </div>
         <div class="form-group">
-          <label class="fl">Metode</label>
+          <label class="fl">Metode Bayar</label>
           <select class="fi" id="e-metode"><option>Card</option><option>Cash THB</option><option>Cash IDR</option><option>Transfer</option></select>
         </div>
         <div class="form-group">
@@ -605,19 +715,18 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
           <tr>
             <th>Tanggal</th><th>Kota</th><th>Kategori</th><th>Deskripsi</th>
             <th>Total IDR</th><th>Total THB</th>
-            <th>Per orang IDR</th><th>Per orang THB</th>
             <th>Dibayar</th><th>Split</th><th>Metode</th><th></th>
           </tr>
         </thead>
         <tbody id="exp-tbody">
-          <tr><td colspan="12" class="empty">Belum ada pengeluaran</td></tr>
+          <tr><td colspan="10" class="empty">Belum ada pengeluaran</td></tr>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="4" class="fw6">TOTAL</td>
             <td id="foot-idr" class="mono fw6">Rp 0</td>
             <td id="foot-thb" class="mono fw6">0 THB</td>
-            <td colspan="6"></td>
+            <td colspan="4"></td>
           </tr>
         </tfoot>
       </table>
@@ -772,8 +881,26 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 <!-- ── ITIN EDIT SHEET ── -->
 <div class="bs-sheet" id="itin-sheet">
   <div class="bs-handle"></div>
-  <div class="bs-title">✏️ Edit Aktivitas</div>
+  <div class="bs-title" id="itin-sheet-title">✏️ Edit Aktivitas</div>
   <div class="bs-sub" id="itin-sheet-ctx" style="background:var(--teal4);border-radius:6px;padding:6px 10px;margin-bottom:14px;font-size:11px;color:var(--teal)"></div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="fl">Emoji / Ikon</label>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:2px">
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🍽</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🍺</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">☕</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🚗</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🏊</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🚶</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🥊</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">⚽</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">🛒</button>
+        <button type="button" onclick="document.getElementById('ie-emoji').value=this.textContent" style="font-size:16px;background:var(--teal4);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer">💆</button>
+      </div>
+      <input type="text" class="fi" id="ie-emoji" placeholder="🍽" style="width:70px;text-align:center;font-size:18px">
+    </div>
+  </div>
   <div class="form-row">
     <div class="form-group"><label class="fl">Waktu</label>
       <input type="text" class="fi" id="ie-time" placeholder="09:00" style="font-family:'Fira Code',monospace">
@@ -812,7 +939,7 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
     <button class="btn btn-teal" onclick="saveItinEdit()">✓ Simpan</button>
   </div>
   <div style="margin-top:10px;display:flex;justify-content:center">
-    <button onclick="deleteItinAct()" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer">🗑 Hapus aktivitas ini</button>
+    <button id="itin-del-btn" onclick="deleteItinAct()" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer">🗑 Hapus aktivitas ini</button>
   </div>
 </div>
 
@@ -1002,11 +1129,11 @@ function initDefaultBudgets() {
 
 function initDefaultPacking() {
   const PACK_ITEMS = {
-    '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans/pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
+    '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans & pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
     '🧴 Toiletries':['Toothbrush & paste','Deodorant','Sunscreen','Shampoo (travel)','Face wash','Razor'],
     '📱 Electronics':['Phone + charger','Power bank','Universal adapter','Earphones','Camera (optional)'],
-    '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirmation','Travel insurance','Cash THB','Cash IDR','ATM/Credit card','Copy of passport (photo)'],
-    '📦 Misc':['Umbrella / raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
+    '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirm','Travel insurance','Cash THB','Cash IDR','ATM & Credit card','Passport copy (photo)'],
+    '📦 Misc':['Umbrella & raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
   };
   packState = {};
   Object.values(PACK_ITEMS).flat().forEach(item => {
@@ -1026,7 +1153,31 @@ function seedDefaultExpenses() {
 // ═══════════════════════════════════════
 // FIREBASE HELPERS
 // ═══════════════════════════════════════
-function fbSet(path, data)    { const db=window._db; if(db) db.ref(path).set(data); }
+function sanitizeKey(s) {
+  return s.replace(/[.#$\[\]/]/g, '-');
+}
+// Sanitize all keys in packing object before writing to Firebase
+function sanitizePacking(obj) {
+  const out = {};
+  Object.entries(obj).forEach(([k,v]) => { out[sanitizeKey(k)] = v; });
+  return out;
+}
+function fbSet(path, data) {
+  const db = window._db;
+  if (!db) return;
+  // Sanitize packing keys to avoid Firebase invalid key errors
+  if (path === 'packing' || path === 'customPackItems') {
+    if (data && typeof data === 'object') {
+      const clean = {};
+      Object.entries(data).forEach(([k, v]) => {
+        clean[sanitizeKey(k)] = v;
+      });
+      db.ref(path).set(clean);
+      return;
+    }
+  }
+  db.ref(path).set(data);
+}
 function fbPush(path, data)   { const db=window._db; if(db) return db.ref(path).push(data); }
 function fbRemove(path)       { const db=window._db; if(db) db.ref(path).remove(); }
 function fbUpdate(path, data) { const db=window._db; if(db) db.ref(path).update(data); }
@@ -1072,6 +1223,8 @@ function syncExp(src) {
   const thb = document.getElementById('e-thb');
   if (src==='idr' && idr.value) thb.value = (parseFloat(idr.value)/kurs).toFixed(0);
   else if (src==='thb' && thb.value) idr.value = Math.round(parseFloat(thb.value)*kurs);
+  calcExtraCharge();
+  updateSplitCustomTotal();
 }
 function syncSt(src) {
   const idr = document.getElementById('st-idr');
@@ -1097,6 +1250,118 @@ function toast(msg, type='ok') {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+
+// ═══════════════════════════════════════
+// EXTRA CHARGES (pajak / service charge)
+// ═══════════════════════════════════════
+let _extraType = 'pct'; // 'pct' | 'nom' | 'none'
+
+function setExtraType(type) {
+  _extraType = type;
+  ['pct','nom','none'].forEach(t => {
+    document.getElementById('ex-tab-'+t).classList.toggle('active', t===type);
+  });
+  document.getElementById('ex-pct-section').style.display  = type==='pct'  ? '' : 'none';
+  document.getElementById('ex-nom-section').style.display  = type==='nom'  ? '' : 'none';
+  calcExtraCharge();
+}
+
+function calcExtraCharge() {
+  const subIdr = parseFloat(document.getElementById('e-idr').value) || 0;
+  let extraIdr = 0;
+  if (_extraType === 'pct') {
+    const pct = parseFloat(document.getElementById('ex-pct').value) || 0;
+    extraIdr = Math.round(subIdr * pct / 100);
+    const res = document.getElementById('ex-pct-result-idr');
+    if (res) res.value = extraIdr > 0 ? 'Rp ' + extraIdr.toLocaleString('id-ID') : '';
+  } else if (_extraType === 'nom') {
+    extraIdr = parseFloat(document.getElementById('ex-nom-idr').value) || 0;
+  }
+  const grand = subIdr + extraIdr;
+  const gt = document.getElementById('ex-grand-total');
+  if (gt) {
+    gt.textContent = grand > 0
+      ? 'Rp ' + Math.round(grand).toLocaleString('id-ID') + ' / ' + Math.round(grand/kurs).toLocaleString('id-ID') + ' THB'
+      : '—';
+  }
+  updateSplitCustomTotal();
+  return extraIdr;
+}
+
+function calcExtraChargeFromThb() {
+  const thbV = parseFloat(document.getElementById('ex-nom-thb').value) || 0;
+  if (thbV) {
+    const idrEl = document.getElementById('ex-nom-idr');
+    if (idrEl) idrEl.value = Math.round(thbV * kurs);
+  }
+  calcExtraCharge();
+}
+
+function getExtraIdr() {
+  return calcExtraCharge();
+}
+
+// ═══════════════════════════════════════
+// SPLIT BILL HELPERS
+// ═══════════════════════════════════════
+let _splitMethod = 'rata';
+
+function toggleSplitChip(el, name) {
+  el.classList.toggle('active');
+  updateSplitCustomTotal();
+}
+
+function setSplitMethod(method) {
+  _splitMethod = method;
+  document.getElementById('split-tab-rata').classList.toggle('active', method==='rata');
+  document.getElementById('split-tab-custom').classList.toggle('active', method==='custom');
+  document.getElementById('split-custom-section').style.display = method==='custom' ? '' : 'none';
+  updateSplitCustomTotal();
+}
+
+// Sync IDR <-> THB within each person's custom split inputs
+function scSyncCurrency(person, src) {
+  const idrEl = document.getElementById('sc-'+person+'-idr');
+  const thbEl = document.getElementById('sc-'+person+'-thb');
+  if (!idrEl || !thbEl) return;
+  if (src === 'idr' && idrEl.value) {
+    thbEl.value = (parseFloat(idrEl.value) / kurs).toFixed(0);
+  } else if (src === 'thb' && thbEl.value) {
+    idrEl.value = Math.round(parseFloat(thbEl.value) * kurs);
+  }
+}
+
+function updateSplitCustomTotal() {
+  if (_splitMethod !== 'custom') return;
+  const members = ['Tama','Evan','Ken','Chando'];
+  const chips   = document.querySelectorAll('.split-chip');
+  let subtotalCustom = 0;
+  members.forEach((m, i) => {
+    const active = chips[i] && chips[i].classList.contains('active');
+    const idrEl  = document.getElementById('sc-'+m.toLowerCase()+'-idr');
+    const thbEl  = document.getElementById('sc-'+m.toLowerCase()+'-thb');
+    if (idrEl) idrEl.style.opacity = active ? '1' : '0.4';
+    if (thbEl) thbEl.style.opacity = active ? '1' : '0.4';
+    if (active && idrEl) subtotalCustom += parseFloat(idrEl.value) || 0;
+  });
+
+  const subIdr = parseFloat(document.getElementById('e-idr').value) || 0;
+  const stEl   = document.getElementById('sc-total');
+  const dfEl   = document.getElementById('sc-diff');
+  if (stEl) stEl.textContent = 'Rp ' + Math.round(subtotalCustom).toLocaleString('id-ID');
+  if (dfEl && subIdr > 0) {
+    const d = subtotalCustom - subIdr;
+    dfEl.textContent  = Math.abs(d) < 1 ? '✓ pas' : (d > 0 ? `+Rp ${Math.round(d).toLocaleString('id-ID')} kelebihan` : `−Rp ${Math.round(-d).toLocaleString('id-ID')} kurang`);
+    dfEl.style.color  = Math.abs(d) < 1 ? 'var(--green)' : 'var(--red)';
+  } else if (dfEl) { dfEl.textContent = ''; }
+}
+
+function getActiveSplit() {
+  const members = ['Tama','Evan','Ken','Chando'];
+  const chips   = document.querySelectorAll('.split-chip');
+  return members.filter((m, i) => chips[i] && chips[i].classList.contains('active'));
+}
+
 // ═══════════════════════════════════════
 // EXPENSE
 // ═══════════════════════════════════════
@@ -1106,26 +1371,84 @@ function addExpense() {
   const desc = document.getElementById('e-desc').value.trim();
   if (!idrV && !thbV) { toast('Isi IDR atau THB dulu!','err'); return; }
   if (!desc) { toast('Deskripsi tidak boleh kosong!','err'); return; }
-  const totalIdr = idrV || Math.round(thbV*kurs);
-  const totalThb = thbV || Math.round(idrV/kurs);
-  const splitOpts = document.getElementById('e-split');
-  const split = Array.from(splitOpts.selectedOptions).map(o=>o.value);
+
+  const subIdr   = idrV || Math.round(thbV * kurs);
+  const subThb   = thbV || Math.round(idrV / kurs);
+  const extraIdr = getExtraIdr();
+  const totalIdr = Math.round(subIdr + extraIdr);
+  const totalThb = Math.round(totalIdr / kurs);
+
+  const split = getActiveSplit();
   if (!split.length) { toast('Pilih minimal 1 orang!','err'); return; }
-  const n = split.length;
+
+  let perIdr, perThb, splitAmounts = null;
+
+  if (_splitMethod === 'custom') {
+    const members = ['Tama','Evan','Ken','Chando'];
+    splitAmounts  = {};
+    let customSubtotal = 0;
+    members.forEach(m => {
+      if (split.includes(m)) {
+        // Use IDR value (already synced from THB input via scSyncCurrency)
+        const v = parseFloat(document.getElementById('sc-'+m.toLowerCase()+'-idr')?.value || 0) || 0;
+        splitAmounts[m] = v;
+        customSubtotal += v;
+      }
+    });
+    // Validate subtotals match (before extra charge)
+    if (Math.abs(customSubtotal - subIdr) > 100) {
+      toast(`Subtotal custom Rp ${Math.round(customSubtotal).toLocaleString('id-ID')} ≠ subtotal Rp ${Math.round(subIdr).toLocaleString('id-ID')}`, 'err');
+      return;
+    }
+    // Distribute extra charge proportionally to custom amounts
+    if (extraIdr > 0 && customSubtotal > 0) {
+      members.forEach(m => {
+        if (splitAmounts[m] !== undefined) {
+          splitAmounts[m] = Math.round(splitAmounts[m] + extraIdr * (splitAmounts[m] / customSubtotal));
+        }
+      });
+    }
+    perIdr = Math.round(totalIdr / split.length);
+    perThb = Math.round(totalThb / split.length);
+  } else {
+    const n = split.length;
+    perIdr = Math.round(totalIdr / n);
+    perThb = Math.round(totalThb / n);
+  }
+
+  // Build extra charge info for display
+  const extraInfo = _extraType !== 'none' && extraIdr > 0 ? {
+    type: _extraType,
+    pct:  _extraType === 'pct' ? (parseFloat(document.getElementById('ex-pct').value)||0) : null,
+    idr:  extraIdr,
+  } : null;
+
   const entry = {
-    date: document.getElementById('e-date').value,
-    kota: document.getElementById('e-kota').value,
-    kat:  document.getElementById('e-kat').value,
-    desc, totalIdr, totalThb,
-    perIdr: Math.round(totalIdr/n),
-    perThb: Math.round(totalThb/n),
+    date:    document.getElementById('e-date').value,
+    kota:    document.getElementById('e-kota').value,
+    kat:     document.getElementById('e-kat').value,
+    desc, subIdr, subThb, totalIdr, totalThb, perIdr, perThb,
     dibayar: document.getElementById('e-bayar').value,
     split,
+    splitMethod: _splitMethod,
+    ...(splitAmounts && { splitAmounts }),
+    ...(extraInfo    && { extraInfo }),
     metode: document.getElementById('e-metode').value,
-    notes: document.getElementById('e-notes').value,
+    notes:  document.getElementById('e-notes').value,
   };
+
   fbPush('expenses', entry);
-  ['e-idr','e-thb','e-desc','e-notes'].forEach(id => document.getElementById(id).value='');
+
+  // Clear form
+  ['e-idr','e-thb','e-desc','e-notes','ex-pct','ex-nom-idr','ex-nom-thb',
+   'sc-tama-idr','sc-tama-thb','sc-evan-idr','sc-evan-thb',
+   'sc-ken-idr','sc-ken-thb','sc-chando-idr','sc-chando-thb']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  const exRes = document.getElementById('ex-pct-result-idr');
+  if (exRes) exRes.value = '';
+  document.getElementById('sc-total').textContent    = 'Rp 0';
+  document.getElementById('sc-diff').textContent     = '';
+  document.getElementById('ex-grand-total').textContent = '—';
   toast('Pengeluaran ditambahkan ✓');
 }
 
@@ -1149,9 +1472,13 @@ function renderExpenses() {
       <td class="mono" style="font-size:10px;white-space:nowrap">${e.date}</td>
       <td>${e.kota}</td>
       <td><span class="tag ${TMAP_EXP[e.kat]||'tag-misc'}">${e.kat}</span></td>
-      <td style="max-width:150px">${e.desc}${e.notes?`<br><span style="color:var(--muted);font-size:9px">${e.notes}</span>`:''}</td>
+      <td style="max-width:160px">
+        ${e.desc}
+        ${e.extraInfo ? `<br><span style="font-size:9px;color:var(--sub);background:var(--gold3);padding:1px 5px;border-radius:4px">${e.extraInfo.type==='pct'?`+${e.extraInfo.pct}%`:'+'} Rp ${Math.round(e.extraInfo.idr).toLocaleString('id-ID')}</span>` : ''}
+        ${e.notes?`<br><span style="color:var(--muted);font-size:9px">${e.notes}</span>`:''}
+      </td>
       <td><div class="money-primary">${fmt(e.totalIdr)}</div><div style="font-size:9px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.totalThb)}</div></td>
-      <td><div class="money-primary">${fmt(e.perIdr)}</div><div style="font-size:9px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.perThb)}</div></td>
+
       <td class="fw6">${e.dibayar}</td>
       <td style="font-size:10px">${Array.isArray(e.split)?e.split.join(', '):e.split}</td>
       <td style="font-size:10px">${e.metode}</td>
@@ -1175,8 +1502,13 @@ function calcSummary() {
   list.forEach(e=>{
     paid[e.dibayar]=(paid[e.dibayar]||0)+e.totalIdr;
     const split = Array.isArray(e.split)?e.split:e.split.split(',').map(s=>s.trim());
-    const share = e.totalIdr/split.length;
-    split.forEach(m=>{owed[m]=(owed[m]||0)+share;});
+    if (e.splitMethod==='custom' && e.splitAmounts) {
+      // Custom nominal — pakai splitAmounts yang sudah include proporsi extra charge
+      split.forEach(m=>{ owed[m]=(owed[m]||0)+(e.splitAmounts[m]||0); });
+    } else {
+      const share = e.totalIdr/split.length;
+      split.forEach(m=>{ owed[m]=(owed[m]||0)+share; });
+    }
   });
   const balance={};
   MEMBERS.forEach(m=>{balance[m]=paid[m]-owed[m];});
@@ -1491,16 +1823,17 @@ function renderBooking() {
 // PACKING
 // ═══════════════════════════════════════
 const PACK_ITEMS = {
-  '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans/pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
+  '👕 Pakaian':['T-shirts (7-8)','Shorts (4-5)','Jeans & pants (1-2)','Underwear','Socks','Swimwear','Sleepwear','Light jacket','Sandals','Sneakers'],
   '🧴 Toiletries':['Toothbrush & paste','Deodorant','Sunscreen','Shampoo (travel)','Face wash','Razor'],
   '📱 Electronics':['Phone + charger','Power bank','Universal adapter','Earphones','Camera (optional)'],
-  '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirmation','Travel insurance','Cash THB','Cash IDR','ATM/Credit card','Copy of passport (photo)'],
-  '📦 Misc':['Umbrella / raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
+  '📄 Dokumen':['Passport','E-ticket printout','Hotel booking confirm','Travel insurance','Cash THB','Cash IDR','ATM & Credit card','Passport copy (photo)'],
+  '📦 Misc':['Umbrella & raincoat','Snacks','Medicine (basic)','Plastic bags','Padlock (optional)'],
 };
 
 function togglePack(item, person) {
-  if (!packState[item]) packState[item]={Tama:false,Evan:false,Ken:false,Chando:false};
-  packState[item][person] = !packState[item][person];
+  const k = sanitizeKey(item);
+  if (!packState[k]) packState[k]={Tama:false,Evan:false,Ken:false,Chando:false};
+  packState[k][person] = !packState[k][person];
   fbSet('packing', packState);
   updatePackStats();
 }
@@ -1622,59 +1955,81 @@ const ITIN = [
 const KAT_TAG = {food:'tag-food',bar:'tag-bar',explore:'tag-explore',jersey:'tag-jersey',muay:'tag-muay',travel:'tag-travel'};
 
 function renderItinerary() {
-  document.getElementById('itin-body').innerHTML = ITIN.map((sec,si) => `
+  const timeToMin = t => {
+    if (!t) return 9999;
+    const m = (t||'').match(/(\d+):(\d+)/);
+    return m ? parseInt(m[1])*60 + parseInt(m[2]) : 9999;
+  };
+  const mkActHTML = a => {
+    const mapsUrl   = (itinMaps && itinMaps[a.k]) || '';
+    const esc = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    return `<div class="act-row">
+      <div class="act-tc"><div class="t-pill">${a.t||'—'}</div></div>
+      <div class="act-ic">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:3px">
+          <div style="flex:1">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+              <div class="act-title">${a.e} ${a.title}</div>
+              <div class="act-tags" style="flex-shrink:0">
+                ${a.idr ? `<span class="money-tag">Rp ${a.idr}</span>` : ''}
+                ${a.mic ? `<span class="tag tag-michelin">✦ ${a.mic}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <button class="itin-edit-btn" title="Edit" onclick="openItinEdit('${esc(a.k)}','${esc(a.t)}','${esc(a.title)}','${esc(a.detail)}','${esc(a.idr)}','${esc(a.warn)}','${esc(a.alt)}','${esc(a.mic)}','${esc(a.e)}','${esc(a.kat)}')">✏</button>
+        </div>
+        ${a.detail ? `<div class="act-detail">${a.detail}</div>` : ''}
+        ${a.warn   ? `<div class="act-warn">⚠ ${a.warn}</div>`   : ''}
+        ${a.alt    ? `<div class="act-alt"><strong>ALT:</strong> ${a.alt}</div>` : ''}
+        <div style="margin-top:5px">
+          ${mapsUrl
+            ? `<a href="${mapsUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
+               <button class="maps-edit-btn has-link" style="margin-left:4px" onclick="openMapsEdit('${esc(a.k)}','itin','${mapsUrl.replace(/'/g,"\\\\'")}','${esc(a.title)}')">✎</button>`
+            : `<button class="maps-edit-btn" onclick="openMapsEdit('${esc(a.k)}','itin','','${esc(a.title)}')">📍 + Link Maps</button>`
+          }
+        </div>
+      </div>
+    </div>`;
+  };
+
+  document.getElementById('itin-body').innerHTML = ITIN.map((sec, si) => `
     <div class="city-div"><span class="city-pill">📍 ${sec.city}</span></div>
-    ${sec.days.map((day,di) => `
-      <div class="day-block">
+    ${sec.days.map((day, di) => {
+      // Build merged list: static + custom
+      const acts = [];
+      day.acts.forEach((a, ai) => {
+        const k  = si+'_'+di+'_'+ai;
+        const ov = (itinEdits && itinEdits[k]) || {};
+        if (ov._deleted) return;
+        acts.push({ k, e: a.e, t: ov.t||a.t, title: ov.title||a.title,
+          detail: ov.detail||a.detail,
+          idr:  ov.idr    !== undefined ? ov.idr  : (a.idr||''),
+          warn: ov.warn   !== undefined ? ov.warn : (a.warn||''),
+          alt:  ov.alt    !== undefined ? ov.alt  : (a.alt||''),
+          mic:  ov.mic    !== undefined ? ov.mic  : (a.mic||''),
+          kat:  ov.kat || a.kat || 'food' });
+      });
+      const prefix = si+'_'+di+'_custom_';
+      Object.entries(itinEdits||{})
+        .filter(([k,v]) => k.startsWith(prefix) && !v._deleted)
+        .forEach(([k,v]) => acts.push({ k, e:v.e||'📌', t:v.t||'',
+          title:v.title||'Aktivitas baru', detail:v.detail||'',
+          idr:v.idr||'', warn:v.warn||'', alt:v.alt||'', mic:v.mic||'', kat:v.kat||'food' }));
+      acts.sort((a,b) => timeToMin(a.t) - timeToMin(b.t));
+
+      return `<div class="day-block">
         <div class="day-hdr">
-          <span class="day-name">${day.day}</span>
-          <span class="day-sub">${day.sub}</span>
+          <div>
+            <span class="day-name">${day.day}</span>
+            <span class="day-sub" style="display:block">${day.sub}</span>
+          </div>
+          <button class="day-add-btn" onclick="openItinAdd('${si}','${di}','${day.day.replace(/'/g,"\\'")}')">+ Tambah</button>
         </div>
         <div class="day-body">
-          ${day.acts.map((a,ai) => {
-            const k = si+'_'+di+'_'+ai;
-            const ov = (itinEdits&&itinEdits[k]) || {};
-            const title  = ov.title  || a.title;
-            const detail = ov.detail || a.detail;
-            const idr    = ov.idr    !== undefined ? ov.idr  : (a.idr||'');
-            const warn   = ov.warn   !== undefined ? ov.warn : (a.warn||'');
-            const alt2   = ov.alt    !== undefined ? ov.alt  : (a.alt||'');
-            const mic    = ov.mic    !== undefined ? ov.mic  : (a.mic||'');
-            const t      = ov.t || a.t;
-            const mapsUrl = (itinMaps&&itinMaps[k]) || '';
-            const titleEsc  = title.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-            const detailEsc = detail.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-            const mapsEsc   = mapsUrl.replace(/'/g,"\\'");
-            return `<div class="act-row">
-              <div class="act-tc"><div class="t-pill">${t}</div></div>
-              <div class="act-ic">
-                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:3px">
-                  <div style="flex:1">
-                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
-                      <div class="act-title">${a.e} ${title}</div>
-                      <div class="act-tags" style="flex-shrink:0">
-                        ${idr ? `<span class="money-tag">Rp ${idr}</span>` : ''}
-                        ${mic ? `<span class="tag tag-michelin">✦ ${mic}</span>` : ''}
-                      </div>
-                    </div>
-                  </div>
-                  <button class="itin-edit-btn" title="Edit aktivitas" onclick="openItinEdit('${k}','${t}','${titleEsc}','${detailEsc}','${idr}','${(warn||'').replace(/'/g,"\\'")}','${(alt2||'').replace(/'/g,"\\'")}','${(mic||'').replace(/'/g,"\\'")}','${a.e||''}','${ov.kat||a.kat||'food'}')">✏</button>
-                </div>
-                <div class="act-detail">${detail}</div>
-                ${warn ? `<div class="act-warn">⚠ ${warn}</div>` : ''}
-                ${alt2 ? `<div class="act-alt"><strong>ALT:</strong> ${alt2}</div>` : ''}
-                <div style="margin-top:5px">
-                  ${mapsUrl
-                    ? `<a href="${mapsUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
-                       <button class="maps-edit-btn has-link" style="margin-left:4px" onclick="openMapsEdit('${k}','itin','${mapsEsc}','${titleEsc}')">✎</button>`
-                    : `<button class="maps-edit-btn" onclick="openMapsEdit('${k}','itin','','${titleEsc}')">📍 + Link Maps</button>`
-                  }
-                </div>
-              </div>
-            </div>`;
-          }).join('')}
+          ${acts.map(a => mkActHTML(a)).join('')}
         </div>
-      </div>`).join('')}
+      </div>`;
+    }).join('')}
   `).join('');
 }
 
@@ -1845,11 +2200,34 @@ function clearMapsLink() {
 // ═══════════════════════════════════════
 // ITIN EDIT
 // ═══════════════════════════════════════
-let _itinEditKey = null;
+let _itinEditKey  = null;
+let _itinAddMode  = false;  // true = tambah baru, false = edit existing
+
+function openItinAdd(si, di, dayLabel) {
+  _itinAddMode = true;
+  // Key: si_di_custom_timestamp — unique per new act
+  _itinEditKey = si + '_' + di + '_custom_' + Date.now();
+  document.getElementById('itin-sheet-title').textContent = '➕ Tambah Aktivitas';
+  document.getElementById('itin-sheet-ctx').textContent   = '📅 ' + dayLabel;
+  document.getElementById('ie-emoji').value  = '📌';
+  document.getElementById('ie-time').value   = '';
+  document.getElementById('ie-title').value  = '';
+  document.getElementById('ie-detail').value = '';
+  document.getElementById('ie-idr').value    = '';
+  document.getElementById('ie-warn').value   = '';
+  document.getElementById('ie-alt').value    = '';
+  document.getElementById('ie-mic').value    = '';
+  document.getElementById('ie-kat').value    = 'food';
+  document.getElementById('itin-del-btn').style.display = 'none';
+  openBS('itin-sheet');
+}
 
 function openItinEdit(key, t, title, detail, idr, warn, alt, mic, emoji, kat) {
+  _itinAddMode = false;
   _itinEditKey = key;
-  document.getElementById('itin-sheet-ctx').textContent = emoji + ' ' + decodeURIComponent(title);
+  document.getElementById('itin-sheet-title').textContent = '✏️ Edit Aktivitas';
+  document.getElementById('itin-sheet-ctx').textContent   = (emoji||'') + ' ' + decodeURIComponent(title);
+  document.getElementById('ie-emoji').value  = emoji || '';
   document.getElementById('ie-time').value   = t || '';
   document.getElementById('ie-title').value  = title || '';
   document.getElementById('ie-detail').value = detail || '';
@@ -1859,14 +2237,18 @@ function openItinEdit(key, t, title, detail, idr, warn, alt, mic, emoji, kat) {
   document.getElementById('ie-mic').value    = mic || '';
   const katSel = document.getElementById('ie-kat');
   if (kat) { for (let o of katSel.options) { if (o.value===kat) { o.selected=true; break; } } }
+  document.getElementById('itin-del-btn').style.display = '';
   openBS('itin-sheet');
 }
 
 function saveItinEdit() {
   if (!_itinEditKey) return;
+  const title = document.getElementById('ie-title').value.trim();
+  if (!title) { toast('Judul aktivitas tidak boleh kosong!','err'); return; }
   const edit = {
+    e:      document.getElementById('ie-emoji').value.trim() || '📌',
     t:      document.getElementById('ie-time').value.trim(),
-    title:  document.getElementById('ie-title').value.trim(),
+    title,
     detail: document.getElementById('ie-detail').value.trim(),
     idr:    document.getElementById('ie-idr').value.trim(),
     warn:   document.getElementById('ie-warn').value.trim(),
@@ -1876,14 +2258,19 @@ function saveItinEdit() {
   };
   fbSet('itinEdits/' + _itinEditKey, edit);
   closeBS();
-  toast('Aktivitas diperbarui ✓');
+  toast(_itinAddMode ? 'Aktivitas ditambahkan ✓' : 'Aktivitas diperbarui ✓');
 }
 
 function deleteItinAct() {
-  if (!_itinEditKey || !confirm('Hapus aktivitas ini dari tampilan?')) return;
-  fbSet('itinEdits/' + _itinEditKey, { _deleted: true });
+  if (!_itinEditKey || !confirm('Hapus aktivitas ini?')) return;
+  // Custom acts: hapus permanen. Static acts: mark _deleted.
+  if (_itinEditKey.includes('_custom_')) {
+    fbRemove('itinEdits/' + _itinEditKey);
+  } else {
+    fbSet('itinEdits/' + _itinEditKey, { _deleted: true });
+  }
   closeBS();
-  toast('Aktivitas disembunyikan');
+  toast('Aktivitas dihapus');
 }
 
 // ═══════════════════════════════════════
