@@ -726,7 +726,7 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
             <td colspan="4" class="fw6">TOTAL</td>
             <td id="foot-idr" class="mono fw6">Rp 0</td>
             <td id="foot-thb" class="mono fw6">0 THB</td>
-            <td colspan="4"></td>
+            <td colspan="3"></td>
           </tr>
         </tfoot>
       </table>
@@ -986,6 +986,7 @@ let packState   = {};
 let itinMaps    = {};
 let itinEdits   = {};
 let kulinerMaps = {};
+let sharedMaps  = {};
 
 // Firebase helpers (available after 'fbready')
 
@@ -1099,6 +1100,14 @@ function initFirebase() {
     const newKM = JSON.stringify(d.kulinerMaps || {});
     if (newKM !== JSON.stringify(kulinerMaps)) {
       kulinerMaps = d.kulinerMaps || {};
+      needRenderKuliner = true;
+    }
+
+    // sharedMaps — synced between itin & kuliner
+    const newSM = JSON.stringify(d.sharedMaps || {});
+    if (newSM !== JSON.stringify(sharedMaps)) {
+      sharedMaps = d.sharedMaps || {};
+      needRenderItin    = true;
       needRenderKuliner = true;
     }
 
@@ -1466,7 +1475,7 @@ function renderExpenses() {
   document.getElementById('foot-idr').textContent  = fmt(totalIdr);
   document.getElementById('foot-thb').textContent  = fmtT(totalThb);
   const tbody = document.getElementById('exp-tbody');
-  if (!list.length) { tbody.innerHTML='<tr><td colspan="12" class="empty">Belum ada pengeluaran</td></tr>'; return; }
+  if (!list.length) { tbody.innerHTML='<tr><td colspan="9" class="empty">Belum ada pengeluaran</td></tr>'; return; }
   tbody.innerHTML = list.map(e => `
     <tr>
       <td class="mono" style="font-size:10px;white-space:nowrap">${e.date}</td>
@@ -1477,8 +1486,8 @@ function renderExpenses() {
         ${e.extraInfo ? `<br><span style="font-size:9px;color:var(--sub);background:var(--gold3);padding:1px 5px;border-radius:4px">${e.extraInfo.type==='pct'?`+${e.extraInfo.pct}%`:'+'} Rp ${Math.round(e.extraInfo.idr).toLocaleString('id-ID')}</span>` : ''}
         ${e.notes?`<br><span style="color:var(--muted);font-size:9px">${e.notes}</span>`:''}
       </td>
-      <td><div class="money-primary">${fmt(e.totalIdr)}</div><div style="font-size:9px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.totalThb)}</div></td>
-
+      <td><div class="money-primary">${fmt(e.totalIdr)}</div></td>
+      <td style="font-size:11px;color:var(--muted);font-family:'Fira Code',monospace">${fmtT(e.totalThb)}</td>
       <td class="fw6">${e.dibayar}</td>
       <td style="font-size:10px">${Array.isArray(e.split)?e.split.join(', '):e.split}</td>
       <td style="font-size:10px">${e.metode}</td>
@@ -1961,7 +1970,8 @@ function renderItinerary() {
     return m ? parseInt(m[1])*60 + parseInt(m[2]) : 9999;
   };
   const mkActHTML = a => {
-    const mapsUrl   = (itinMaps && itinMaps[a.k]) || '';
+    const _sharedK  = getSharedKeyForTitle(a.title);
+    const mapsUrl   = (_sharedK && sharedMaps[_sharedK]) || (itinMaps && itinMaps[a.k]) || '';
     const esc = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
     return `<div class="act-row">
       <div class="act-tc"><div class="t-pill">${a.t||'—'}</div></div>
@@ -2057,7 +2067,8 @@ function renderKuliner() {
   ['pattaya','bangkok'].forEach(loc => {
     document.getElementById('kuliner-'+loc).innerHTML = (KULINER_DATA[loc]||[]).map((k,ki) => {
       const mKey = loc+'_'+ki;
-      const mUrl = (kulinerMaps && kulinerMaps[mKey]) || '';
+      const _sk = KULINER_NAME_MAP[k.nama];
+      const mUrl = (_sk && sharedMaps[_sk]) || (kulinerMaps && kulinerMaps[mKey]) || '';
       const booking = k.booking;
       return `<div class="k-card">
         <div class="k-card-top">
@@ -2166,15 +2177,67 @@ function closeBS() {
 }
 
 // ═══════════════════════════════════════
-// MAPS LINKS  (stored in Firebase: itinMaps / kulinerMaps)
+
+// Maps: keywords that appear in ITIN act titles → shared key matching kuliner nama
+const PLACE_NAME_MAP = {
+  'Krua Rom Mai Thai':    'krua-rom-mai-thai',
+  'Hermes Skybar':        'hermes-skybar',
+  'La Voi Premium Beef':  'la-voi-premium-beef',
+  'Krua Laew Tae R-Rom':  'krua-laew-tae-r-rom',
+  'Lung Shall Kitchen':   'lung-shall-kitchen',
+  'Pladids':              'pladids',
+  'Thipsamai Pad Thai':   'thipsamai-pad-thai',
+  'Khao Man Gai Jae Yi':  'khao-man-gai-jae-yi',
+  'Jeh O Chula':          'jeh-o-chula',
+  'Polo Fried Chicken':   'polo-fried-chicken',
+  'Khao Gaeng Jek Pui':   'khao-gaeng-jek-pui',
+  'Jay Fai':              'jay-fai',
+  'Lucky Seafood':        'lucky-seafood',
+  'SookSiam':             'sooksiam-food-court',
+  'Studio Lam':           'studio-lam',
+  'Dumbo Ari':            'dumbo-ari',
+  'Chinatown Yacht Club':  'chinatown-yacht-club',
+  'Or Tor Kor':           'or-tor-kor-market',
+  'IconSiam':             'iconsiam',
+  'Rod Fai Night Market': 'rod-fai-night-market',
+  'Rajadamnern':          'rajadamnern-stadium',
+};
+// Map kuliner nama → shared key
+const KULINER_NAME_MAP = {
+  'Krua Rom Mai Thai':    'krua-rom-mai-thai',
+  'La Voi Premium Beef':  'la-voi-premium-beef',
+  'Krua Laew Tae R-Rom':  'krua-laew-tae-r-rom',
+  'Lung Shall Kitchen':   'lung-shall-kitchen',
+  'Pladids':              'pladids',
+  'Thipsamai Pad Thai':   'thipsamai-pad-thai',
+  'Khao Man Gai Jae Yi':  'khao-man-gai-jae-yi',
+  'Jeh O Chula':          'jeh-o-chula',
+  'Polo Fried Chicken':   'polo-fried-chicken',
+  'Khao Gaeng Jek Pui':   'khao-gaeng-jek-pui',
+  'Jay Fai':              'jay-fai',
+  'Lucky Seafood':        'lucky-seafood',
+  'SookSiam Food Court':  'sooksiam-food-court',
+};
+
+function getSharedKeyForTitle(title) {
+  for (const [kw, sk] of Object.entries(PLACE_NAME_MAP)) {
+    if (title && title.includes(kw)) return sk;
+  }
+  return null;
+}
+
+// MAPS LINKS  (stored in Firebase: itinMaps / kulinerMaps / sharedMaps)
 // ═══════════════════════════════════════
 
 let _mapsCtx    = null; // {key, type ('itin'|'kuliner')}
 
 function openMapsEdit(key, type, currentUrl, label) {
-  _mapsCtx = { key, type };
+  const sharedKey = getSharedKeyForTitle(label);
+  // If there's a shared link, prefer that over the local one
+  const effectiveUrl = (sharedKey && sharedMaps[sharedKey]) || currentUrl || '';
+  _mapsCtx = { key, type, sharedKey };
   document.getElementById('maps-sheet-sub').textContent = label || 'Tambah link Google Maps';
-  document.getElementById('maps-input').value = currentUrl || '';
+  document.getElementById('maps-input').value = effectiveUrl;
   openBS('maps-sheet');
   setTimeout(() => document.getElementById('maps-input').focus(), 150);
 }
@@ -2183,16 +2246,26 @@ function saveMapsLink() {
   if (!_mapsCtx) return;
   const url = document.getElementById('maps-input').value.trim();
   if (url && !url.startsWith('http')) { toast('Link harus dimulai dengan http...','err'); return; }
-  const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
-  fbSet(path, url || null);
+  if (_mapsCtx.sharedKey) {
+    // Save to sharedMaps — syncs to both itin and kuliner automatically
+    fbSet('sharedMaps/' + _mapsCtx.sharedKey, url || null);
+  } else {
+    // Local only — no matching kuliner/itin counterpart
+    const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
+    fbSet(path, url || null);
+  }
   closeBS();
-  toast(url ? '📍 Link Maps disimpan ✓' : 'Link dihapus');
+  toast(url ? '📍 Link Maps disimpan — muncul di Itinerary & Kuliner ✓' : 'Link dihapus');
 }
 
 function clearMapsLink() {
   if (!_mapsCtx) return;
-  const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
-  fbRemove(path);
+  if (_mapsCtx.sharedKey) {
+    fbRemove('sharedMaps/' + _mapsCtx.sharedKey);
+  } else {
+    const path = _mapsCtx.type === 'itin' ? 'itinMaps/' + _mapsCtx.key : 'kulinerMaps/' + _mapsCtx.key;
+    fbRemove(path);
+  }
   closeBS();
   toast('Link dihapus');
 }
