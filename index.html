@@ -382,6 +382,19 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 .split-custom-item{display:flex;flex-direction:column;gap:3px}
 .split-custom-item label{font-size:10px;font-weight:600;color:var(--sub)}
 
+
+/* KULINER TIPE FILTER */
+.k-filter-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.k-filter-btn{background:var(--teal4);border:1.5px solid var(--border);color:var(--sub);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .15s}
+.k-filter-btn.active{background:var(--navy);border-color:var(--navy);color:var(--teal2)}
+.k-tipe-header{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin:16px 0 8px;letter-spacing:-.2px}
+.k-edit-btn{opacity:0;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:10px;padding:2px 7px;border-radius:5px;cursor:pointer;transition:all .15s;position:absolute;top:10px;right:10px}
+.k-card:hover .k-edit-btn{opacity:1}
+.k-edit-btn:hover{background:var(--teal4);color:var(--teal);border-color:var(--teal)}
+.k-card-top{position:relative}
+.tag-bar{background:#FEF9C3;color:#854D0E}
+.tag-cafe{background:#EDE9FE;color:#5B21B6}
+
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--white);padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;border-left:3px solid var(--teal2);box-shadow:0 8px 24px #0005;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
@@ -452,13 +465,13 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 <div class="nav-wrap">
   <nav class="nav">
     <button class="nav-btn active"  onclick="show('itinerary',this)">📅 Itinerary</button>
-    <button class="nav-btn" onclick="show('kuliner',this)">🍽 Kuliner</button>
-    <button class="nav-btn" onclick="show('tips',this)">📌 Tips</button>
+    <button class="nav-btn" onclick="show('kuliner',this)">🍽 Tempat</button>
     <button class="nav-btn" onclick="show('booking',this)">📑 Booking</button>
     <button class="nav-btn" onclick="show('expense',this)">💰 Expenses</button>
     <button class="nav-btn" onclick="show('summary',this)">📊 Summary</button>
     <button class="nav-btn" onclick="show('budget',this)">🎯 Budget</button>
     <button class="nav-btn" onclick="show('packing',this)">🎒 Packing</button>
+    <button class="nav-btn" onclick="show('tips',this)">📌 Tips</button>
   </nav>
 </div>
 
@@ -480,14 +493,28 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 ══════════════════════════════════════ -->
 <div id="kuliner" class="section">
   <div class="sec-hdr">
-    <div class="sec-title">Panduan Kuliner</div>
-    <div class="sec-sub">17 restoran pilihan — semua no pork · harga dalam IDR (prioritas) & THB</div>
+    <div class="sec-title">Tempat & Kuliner</div>
+    <div class="sec-sub">Restoran, bar, dan cafe pilihan — no pork · harga IDR & THB · bisa tambah sendiri</div>
+  </div>
+  <div class="k-filter-bar">
+    <button class="k-filter-btn active" onclick="setKulinerFilter('semua',this)">Semua</button>
+    <button class="k-filter-btn" onclick="setKulinerFilter('food',this)">🍽 Restoran</button>
+    <button class="k-filter-btn" onclick="setKulinerFilter('bar',this)">🍺 Bar</button>
+    <button class="k-filter-btn" onclick="setKulinerFilter('cafe',this)">☕ Cafe</button>
+  </div>
+  <div class="sec-hdr" style="margin-bottom:4px">
   </div>
 
-  <div class="city-div"><span class="city-pill">📍 PATTAYA</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div class="city-div" style="flex:1;margin:0"><span class="city-pill">📍 PATTAYA</span></div>
+    <button class="btn btn-teal btn-sm" onclick="openKulinerAdd('pattaya')" style="margin-left:10px;white-space:nowrap">+ Tambah</button>
+  </div>
   <div class="k-grid" id="kuliner-pattaya"></div>
 
-  <div class="city-div"><span class="city-pill">📍 BANGKOK</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;margin-top:20px">
+    <div class="city-div" style="flex:1;margin:0"><span class="city-pill">📍 BANGKOK</span></div>
+    <button class="btn btn-teal btn-sm" onclick="openKulinerAdd('bangkok')" style="margin-left:10px;white-space:nowrap">+ Tambah</button>
+  </div>
   <div class="k-grid" id="kuliner-bangkok"></div>
 </div>
 
@@ -944,6 +971,88 @@ input.fi:focus,select.fi:focus{border-color:var(--teal2);background:var(--white)
 </div>
 
 <!-- ── PACKING ADD ITEM SHEET ── -->
+
+
+<!-- ── BOOKING EDIT SHEET ── -->
+<div class="bs-sheet" id="booking-sheet">
+  <div class="bs-handle"></div>
+  <div class="bs-title" id="booking-sheet-title">✏️ Edit Booking</div>
+  <div class="form-row">
+    <div class="form-group"><label class="fl">Tipe</label>
+      <select class="fi" id="be-tipe"><option>Flight</option><option>Hotel</option><option>Transport</option><option>Activity</option><option>Restaurant</option><option>Lainnya</option></select>
+    </div>
+    <div class="form-group half"><label class="fl">Nama</label>
+      <input type="text" class="fi" id="be-nama">
+    </div>
+    <div class="form-group"><label class="fl">Tanggal</label>
+      <input type="text" class="fi" id="be-tgl">
+    </div>
+    <div class="form-group"><label class="fl">Provider</label>
+      <input type="text" class="fi" id="be-prov">
+    </div>
+    <div class="form-group"><label class="fl">Status</label>
+      <select class="fi" id="be-status"><option>Confirmed</option><option>Booked</option><option>Pending</option><option>Open</option></select>
+    </div>
+    <div class="form-group"><label class="fl">PIC</label>
+      <select class="fi" id="be-pic"><option value="">-</option><option>Tama</option><option>Evan</option><option>Ken</option><option>Chando</option></select>
+    </div>
+    <div class="form-group wide"><label class="fl">Notes</label>
+      <input type="text" class="fi" id="be-notes">
+    </div>
+  </div>
+  <div class="bs-actions">
+    <button class="btn btn-outline" onclick="closeBS()">Batal</button>
+    <button class="btn btn-teal" onclick="saveBookingEdit()">✓ Simpan</button>
+  </div>
+</div>
+
+<!-- ── KULINER ADD/EDIT SHEET ── -->
+<div class="bs-sheet" id="kuliner-sheet">
+  <div class="bs-handle"></div>
+  <div class="bs-title" id="kuliner-sheet-title">➕ Tambah Tempat</div>
+  <div class="bs-sub" id="kuliner-sheet-loc" style="background:var(--teal4);border-radius:6px;padding:5px 10px;margin-bottom:14px;font-size:11px;color:var(--teal)">Pattaya</div>
+  <div class="form-row">
+    <div class="form-group"><label class="fl">Tipe</label>
+      <select class="fi" id="ke-tipe">
+        <option value="food">🍽 Restoran</option>
+        <option value="bar">🍺 Bar & Nightlife</option>
+        <option value="cafe">☕ Cafe</option>
+      </select>
+    </div>
+    <div class="form-group half"><label class="fl">Nama Tempat</label>
+      <input type="text" class="fi" id="ke-nama" placeholder="misal: Som Tum Jay So">
+    </div>
+    <div class="form-group"><label class="fl">Area / Lokasi</label>
+      <input type="text" class="fi" id="ke-kota" placeholder="misal: PATTAYA — JOMTIEN">
+    </div>
+    <div class="form-group wide"><label class="fl">Menu Andalan</label>
+      <textarea class="fi" id="ke-menu" rows="2" style="resize:none;font-size:12px" placeholder="misal: Som Tum, larb, sticky rice · porsi besar"></textarea>
+    </div>
+    <div class="form-group"><label class="fl">Range Harga IDR</label>
+      <input type="text" class="fi" id="ke-harga" placeholder="misal: Rp 53.100 – 106.200">
+    </div>
+    <div class="form-group"><label class="fl">Tags (pisah koma)</label>
+      <input type="text" class="fi" id="ke-tags" placeholder="misal: Walk-in OK, Halal">
+    </div>
+    <div class="form-group wide"><label class="fl">Catatan / Jam Buka / Booking</label>
+      <input type="text" class="fi" id="ke-notes" placeholder="misal: TUTUP SENIN · Buka 11:00–21:00">
+    </div>
+    <div class="form-group"><label class="fl">Perlu Booking?</label>
+      <select class="fi" id="ke-booking">
+        <option value="false">✓ Tidak perlu booking</option>
+        <option value="true">⚠ Perlu booking</option>
+      </select>
+    </div>
+  </div>
+  <div class="bs-actions">
+    <button class="btn btn-outline" onclick="closeBS()">Batal</button>
+    <button class="btn btn-teal" onclick="saveKulinerItem()">✓ Simpan</button>
+  </div>
+  <div id="kuliner-del-row" style="margin-top:10px;text-align:center;display:none">
+    <button onclick="delKulinerItem()" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer">🗑 Hapus tempat ini</button>
+  </div>
+</div>
+
 <div class="bs-sheet" id="pack-sheet">
   <div class="bs-handle"></div>
   <div class="bs-title">➕ Tambah Item Packing</div>
@@ -987,6 +1096,7 @@ let itinMaps    = {};
 let itinEdits   = {};
 let kulinerMaps = {};
 let sharedMaps  = {};
+let kulinerCustom  = {pattaya:[], bangkok:[]};  // user-added items
 
 // Firebase helpers (available after 'fbready')
 
@@ -1108,6 +1218,13 @@ function initFirebase() {
     if (newSM !== JSON.stringify(sharedMaps)) {
       sharedMaps = d.sharedMaps || {};
       needRenderItin    = true;
+      needRenderKuliner = true;
+    }
+
+    // kulinerCustom — user-added places
+    const newKC = JSON.stringify(d.kulinerCustom || {});
+    if (newKC !== JSON.stringify(kulinerCustom)) {
+      kulinerCustom = d.kulinerCustom || {pattaya:[], bangkok:[]};
       needRenderKuliner = true;
     }
 
@@ -1823,7 +1940,10 @@ function renderBooking() {
       ${b.pic   ?`<div class="b-detail">👤 PIC: ${b.pic}</div>`:''}
       ${b.notes ?`<div class="b-detail" style="font-style:italic">💬 ${b.notes}</div>`:''}
       <div style="margin-top:8px;display:flex;justify-content:flex-end">
-        <button class="btn btn-red btn-sm" onclick="delBooking('${b._key}')">✕ Hapus</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="openBookingEdit('${b._key}')">✏ Edit</button>
+          <button class="btn btn-red btn-sm" onclick="delBooking('${b._key}')">✕</button>
+        </div>
       </div>
     </div>`).join('');
 }
@@ -2045,61 +2165,109 @@ function renderItinerary() {
 
 const KULINER_DATA = {
   pattaya: [
-    {kota:'PATTAYA — HALAL CERTIFIED',nama:'Krua Rom Mai Thai',tags:['Halal Certified'],menu:'Tom Yum, crispy fish, prawn salad, ayam goreng · ada musholla & mukena',harga:'Rp 79.500 – 132.750',booking:false,notes:'Buka setiap hari 10:00–20:00'},
-    {kota:'PATTAYA — JOMTIEN',nama:'La Voi Premium Beef',tags:['Bib Gourmand'],menu:'Sup sapi premium, mix beef noodle, Tom Yum · 100% no pork',harga:'Rp 106.200 – 185.850',booking:false,notes:'TUTUP SENIN · Datang sebelum jam 11'},
-    {kota:'PATTAYA — NA KLUEA',nama:'Krua Laew Tae R-Rom',tags:['Bib Gourmand'],menu:'Cumi tinta hitam, Tom Yum ikan, seafood ultra segar · menu tergantung tangkapan',harga:'Rp 159.000 – 265.500',booking:true,notes:'WAJIB BOOKING: +66 90 987 1101 · min. seminggu sebelumnya'},
-    {kota:'PATTAYA — HIDDEN GEM',nama:'Lung Shall Kitchen',tags:['Bib Gourmand'],menu:'Thai autentik, Fish Tom Yum, Geng Khua Koong · harga super murah',harga:'Rp 53.100 – 106.200',booking:false,notes:'BUKA JUM–MIN SAJA · Datang pagi, cepat penuh!'},
-    {kota:"PATTAYA — CHEF'S TABLE",nama:'Pladids',tags:['Bib Gourmand'],menu:'Seafood musiman sustainable · menu berubah tiap 3 bulan · hanya 3 meja',harga:'Rp 212.400 – 371.700',booking:true,notes:'WAJIB BOOKING via DM @pladids.fisherman · sangat terbatas'},
+    // 🍽 RESTORAN
+    {tipe:'food',kota:'PATTAYA — HALAL',nama:'Krua Rom Mai Thai',tags:['Halal Certified'],menu:'Tom Yum, crispy fish, prawn salad, ayam goreng · ada musholla & mukena',harga:'Rp 79.500 – 132.750',booking:false,notes:'Buka setiap hari 10:00–20:00'},
+    {tipe:'food',kota:'PATTAYA — JOMTIEN',nama:'La Voi Premium Beef',tags:['Bib Gourmand'],menu:'Sup sapi premium, mix beef noodle, Tom Yum · 100% no pork',harga:'Rp 106.200 – 185.850',booking:false,notes:'TUTUP SENIN · Datang sebelum jam 11'},
+    {tipe:'food',kota:'PATTAYA — NA KLUEA',nama:'Krua Laew Tae R-Rom',tags:['Bib Gourmand'],menu:'Cumi tinta hitam, Tom Yum ikan, seafood ultra segar · menu tergantung tangkapan',harga:'Rp 159.000 – 265.500',booking:true,notes:'WAJIB BOOKING: +66 90 987 1101 · min. seminggu sebelumnya'},
+    {tipe:'food',kota:'PATTAYA — HIDDEN GEM',nama:'Lung Shall Kitchen',tags:['Bib Gourmand'],menu:'Thai autentik, Fish Tom Yum, Geng Khua Koong · harga super murah',harga:'Rp 53.100 – 106.200',booking:false,notes:'BUKA JUM–MIN SAJA · Datang pagi, cepat penuh!'},
+    {tipe:'food',kota:"PATTAYA — CHEF'S TABLE",nama:'Pladids',tags:['Bib Gourmand'],menu:'Seafood musiman sustainable · menu berubah tiap 3 bulan · hanya 3 meja',harga:'Rp 212.400 – 371.700',booking:true,notes:'WAJIB BOOKING via DM @pladids.fisherman · sangat terbatas'},
+    {tipe:'food',kota:'PATTAYA — JOMTIEN',nama:'Pupen Seafood',tags:['Walk-in OK'],menu:'Seafood segar, cumi goreng, ikan bakar · porsi besar harga lokal · view pantai',harga:'Rp 79.500 – 185.850',booking:false,notes:'Walk-in, ramai malam hari · ujung Jomtien Beach'},
+    {tipe:'food',kota:'PATTAYA — PRATUMNAK',nama:'Mum Aroi',tags:['Walk-in OK'],menu:'Seafood view laut · Tom Yum jumbo, cumi goreng mentega, udang · suasana santai',harga:'Rp 106.200 – 212.400',booking:false,notes:'Walk-in OK · view Koh Larn'},
+    // 🍺 BAR & NIGHTLIFE
+    {tipe:'bar',kota:'PATTAYA — PRATUMNAK',nama:'Hermes Skybar Pratumnak',tags:['Rooftop Bar'],menu:'Cocktail, beer, mocktail · view 360° Koh Larn & Pattaya Bay · live DJ weekend',harga:'Rp 106.200 – 265.500',booking:false,notes:'Buka 18:00–01:00 setiap hari'},
+    {tipe:'bar',kota:'PATTAYA — JOMTIEN',nama:'Beach Bar Jomtien',tags:['Beach Bar','Chill'],menu:'Beer 80–120 THB · cocktail murah · kursi pasir pinggir pantai · sunset vibes',harga:'Rp 42.480 – 106.200',booking:false,notes:'Banyak pilihan sepanjang pantai, tidak ada booking'},
+    {tipe:'bar',kota:'PATTAYA — CENTRAL',nama:'Horizon Rooftop Hilton',tags:['Rooftop Bar'],menu:'Cocktail premium · live DJ · view Pattaya Bay · dress code smart casual',harga:'Rp 159.300 – 371.700',booking:false,notes:'Walk-in, datang sebelum 20:00 untuk dapat tempat'},
+    // ☕ CAFE
+    {tipe:'cafe',kota:'PATTAYA — PRATUMNAK',nama:'Cosy Beach Cafe',tags:['Cafe'],menu:'Kopi specialty, smoothie, pastry · outdoor garden · WiFi kencang · instagrammable',harga:'Rp 53.100 – 106.200',booking:false,notes:'Buka 08:00–18:00 · cocok untuk sarapan & work'},
+    {tipe:'cafe',kota:'PATTAYA — JOMTIEN',nama:'The Roastery Pattaya',tags:['Specialty Coffee'],menu:'Single origin pour over, espresso · kue homemade · interior industrial chic',harga:'Rp 53.100 – 106.200',booking:false,notes:'Buka 08:00–17:00 · tutup Rabu'},
   ],
   bangkok: [
-    {kota:'BANGKOK — GIANT SWING',nama:'Thipsamai Pad Thai',tags:['Bib Gourmand'],menu:'Pad Thai wrapped omelette · Pad Thai original · versi omelette adalah yang terbaik',harga:'Rp 79.500 – 132.750',booking:false,notes:'TUTUP SELASA · Buka pagi–midnight hari lain'},
-    {kota:'BANGKOK — PRATUNAM',nama:'Khao Man Gai Jae Yi',tags:['Bib Gourmand'],menu:'Khao Man Gai (nasi ayam Hainan) · ayam lembut, nasi wangi, saus nendang',harga:'Rp 31.860 – 53.100',booking:false,notes:'Buka pagi–siang, tutup Senin'},
-    {kota:'BANGKOK — BANTHAT THONG',nama:'Jeh O Chula',tags:['Street Food'],menu:'Tom Yum Mama porsi sharing · wajib makan rame-rame · antri tapi worth it',harga:'Rp 79.500 – 159.300',booking:false,notes:'Langsung datang, siap-siap antri'},
-    {kota:'BANGKOK — LUMPHINI',nama:'Polo Fried Chicken',tags:['Michelin Rec.'],menu:'Ayam goreng bawang putih crispy · papaya salad juara · ½ porsi cukup 2 orang',harga:'Rp 79.500 – 132.750',booking:false,notes:'Tutup Senin'},
-    {kota:'BANGKOK — CHINATOWN',nama:'Khao Gaeng Jek Pui',tags:['Michelin Rec.'],menu:'Curry rice Rp 23.895/porsi (45 THB) · beef & chicken & green curry',harga:'Rp 23.895 – 53.100',booking:false,notes:'Buka sore 14:00–19:30'},
-    {kota:'BANGKOK — MAHACHAI RD',nama:'Jay Fai',tags:['1 Michelin Star'],menu:'Crab omelette legendary · Drunken noodle · dimasak nenek ikonik berkacamata goggle',harga:'Rp 530.000 – 795.000',booking:true,notes:'Booking website atau antri jam 09:00 pagi · Buka Rabu–Sabtu'},
-    {kota:'BANGKOK — TALING CHAN',nama:'Lucky Seafood',tags:['Bib Gourmand'],menu:'Kepiting tumis cabai, cumi kari · seafood segar · homemade curry paste',harga:'Rp 159.300 – 265.500',booking:true,notes:'BOOKING: +66 94 965 1881 · Buka Rabu–Minggu sore'},
-    {kota:'BANGKOK — ICONSIAM LG',nama:'SookSiam Food Court',tags:['Street Food'],menu:'Aneka street food lokal terbaik · tematik pasar apung · ber-AC',harga:'Rp 53.100 – 132.750',booking:false,notes:'Langsung datang · Di dalam IconSiam lt. LG'},
+    // 🍽 RESTORAN
+    {tipe:'food',kota:'BANGKOK — GIANT SWING',nama:'Thipsamai Pad Thai',tags:['Bib Gourmand'],menu:'Pad Thai wrapped omelette · Pad Thai original · versi omelette adalah yang terbaik',harga:'Rp 79.500 – 132.750',booking:false,notes:'TUTUP SELASA · Buka pagi–midnight hari lain'},
+    {tipe:'food',kota:'BANGKOK — PRATUNAM',nama:'Khao Man Gai Jae Yi',tags:['Bib Gourmand'],menu:'Khao Man Gai (nasi ayam Hainan) · ayam lembut, nasi wangi, saus nendang',harga:'Rp 31.860 – 53.100',booking:false,notes:'Buka pagi–siang, tutup Senin'},
+    {tipe:'food',kota:'BANGKOK — BANTHAT THONG',nama:'Jeh O Chula',tags:['Street Food'],menu:'Tom Yum Mama porsi sharing · wajib makan rame-rame · antri tapi worth it',harga:'Rp 79.500 – 159.300',booking:false,notes:'Langsung datang, siap-siap antri'},
+    {tipe:'food',kota:'BANGKOK — LUMPHINI',nama:'Polo Fried Chicken',tags:['Michelin Rec.'],menu:'Ayam goreng bawang putih crispy · papaya salad juara · ½ porsi cukup 2 orang',harga:'Rp 79.500 – 132.750',booking:false,notes:'Tutup Senin'},
+    {tipe:'food',kota:'BANGKOK — CHINATOWN',nama:'Khao Gaeng Jek Pui',tags:['Michelin Rec.'],menu:'Curry rice legendaris · 45 THB/porsi · beef & chicken & green curry',harga:'Rp 23.895 – 53.100',booking:false,notes:'Buka sore 14:00–19:30'},
+    {tipe:'food',kota:'BANGKOK — MAHACHAI RD',nama:'Jay Fai',tags:['1 Michelin Star'],menu:'Crab omelette legendary · Drunken noodle · dimasak nenek ikonik berkacamata goggle',harga:'Rp 530.000 – 795.000',booking:true,notes:'Booking website atau antri jam 09:00 pagi · Buka Rabu–Sabtu'},
+    {tipe:'food',kota:'BANGKOK — TALING CHAN',nama:'Lucky Seafood',tags:['Bib Gourmand'],menu:'Kepiting tumis cabai, cumi kari · seafood segar · homemade curry paste',harga:'Rp 159.300 – 265.500',booking:true,notes:'BOOKING: +66 94 965 1881 · Buka Rabu–Minggu sore'},
+    {tipe:'food',kota:'BANGKOK — ICONSIAM LG',nama:'SookSiam Food Court',tags:['Street Food'],menu:'Aneka street food lokal terbaik · tematik pasar apung · ber-AC',harga:'Rp 53.100 – 132.750',booking:false,notes:'Langsung datang · Di dalam IconSiam lt. LG'},
+    {tipe:'food',kota:'BANGKOK — CHATUCHAK',nama:'Or Tor Kor Market',tags:['Pasar Premium'],menu:'Buah tropis premium, snack Thailand, bumbu masak, kopi lokal · pasar paling bersih Bangkok',harga:'Rp 26.550 – 79.500',booking:false,notes:'Buka 08:00–18:00 setiap hari · dekat MRT Kamphaeng Phet'},
+    {tipe:'food',kota:'BANGKOK — SIAM',nama:'MBK Food Island (LG)',tags:['Food Court'],menu:'Food court murah & lengkap · Tom Kha, nasi goreng, mango sticky rice, dimsum · pakai token',harga:'Rp 26.550 – 79.500',booking:false,notes:'Buka 10:00–22:00 · di dalam MBK Center'},
+    {tipe:'food',kota:'BANGKOK — SILOM',nama:'Eat Me Restaurant',tags:['Fine Dining','No Pork'],menu:'Fine dining modern fusion · menu seasonal · amosphere stylish · no pork',harga:'Rp 530.000 – 1.060.000',booking:true,notes:'Reservasi via website · Buka dinner only 18:00–01:00'},
+    // 🍺 BAR
+    {tipe:'bar',kota:'BANGKOK — ARI',nama:'Dumbo Ari',tags:['Rooftop Bar','Live Jazz'],menu:'Cocktail craft · beer · live jazz harian · rooftop rustic atas gedung tua kawasan Ari',harga:'Rp 106.200 – 265.500',booking:false,notes:'Walk-in · buka 17:00 · dekat Airbnb Intharama'},
+    {tipe:'bar',kota:'BANGKOK — THONGLOR',nama:'Studio Lam',tags:['Bar Vinyl','Must-go'],menu:'Bar vinyl legendaris 6.000+ koleksi · musik world/indie/jazz · crowd lokal hipster',harga:'Rp 79.500 – 212.400',booking:false,notes:'Walk-in · buka 19:00 · Thonglor Soi 1'},
+    {tipe:'bar',kota:'BANGKOK — CHINATOWN',nama:'Chinatown Yacht Club',tags:['Rooftop Bar'],menu:'3 lantai shophouse bersejarah Soi Nana · rooftop urban garden · DJ chill · cocktail',harga:'Rp 106.200 – 265.500',booking:false,notes:'Walk-in · buka 17:00–01:00 · Chinatown Soi Nana'},
+    {tipe:'bar',kota:'BANGKOK — THONGLOR',nama:'Tichuca Rooftop Bar',tags:['Rooftop Bar','View Kota'],menu:'Rooftop hutan tropis 46 lantai · panorama Bangkok · cocktail kreatif · Instagram magnet',harga:'Rp 212.400 – 477.900',booking:false,notes:'Walk-in, tapi bisa ramai · buka 17:00–01:00'},
+    {tipe:'bar',kota:'BANGKOK — SILOM',nama:'Maggie Choo's',tags:['Speakeasy Bar'],menu:'Speakeasy underground legendary · swing jazz · live performer malam · craft cocktail',harga:'Rp 159.300 – 318.600',booking:false,notes:'Buka 20:00 · Silom · vibe 1920s Shanghai'},
+    // ☕ CAFE
+    {tipe:'cafe',kota:'BANGKOK — ARI',nama:'Brave Roasters Ari',tags:['Specialty Coffee'],menu:'Single origin specialty · filter & espresso · minimal interior · crowd creative local',harga:'Rp 53.100 – 106.200',booking:false,notes:'Buka 08:00–18:00 · dekat Airbnb Intharama 9'},
+    {tipe:'cafe',kota:'BANGKOK — THONGLOR',nama:'Ristr8to Lab',tags:['Specialty Coffee'],menu:'Specialty coffee competition-grade · latte art · pastry · indoor industrial cool',harga:'Rp 53.100 – 132.750',booking:false,notes:'Buka 08:00–19:00 · ada beberapa cabang Bangkok'},
+    {tipe:'cafe',kota:'BANGKOK — CHATUCHAK',nama:'Kaizen Coffee',tags:['Cafe','Brunch'],menu:'Kopi specialty + brunch Western-Asian fusion · avocado toast, eggs benny · modern clean',harga:'Rp 79.500 – 159.300',booking:false,notes:'Buka 08:00–17:00 · area dekat JJ Market'},
   ],
 };
 
 function renderKuliner() {
+  const filter = window._kulinerFilter || 'semua';
   ['pattaya','bangkok'].forEach(loc => {
-    document.getElementById('kuliner-'+loc).innerHTML = (KULINER_DATA[loc]||[]).map((k,ki) => {
-      const mKey = loc+'_'+ki;
-      const _sk = KULINER_NAME_MAP[k.nama];
-      const mUrl = (_sk && sharedMaps[_sk]) || (kulinerMaps && kulinerMaps[mKey]) || '';
-      const booking = k.booking;
-      return `<div class="k-card">
-        <div class="k-card-top">
-          <div class="k-city">${k.kota}</div>
-          <div class="k-name">${k.nama}</div>
-          <div class="k-tags">
-            ${k.tags.map(t => {
-              const tc = t.includes('Halal')?'tag-halal':t.includes('Michelin')||t.includes('Bib')?'tag-michelin':'tag-food';
-              return `<span class="tag ${tc}">✦ ${t}</span>`;
-            }).join('')}
-          </div>
-        </div>
-        <div class="k-body">
-          <div class="k-menu">${k.menu}</div>
-          <div class="k-price">
-            <span class="idr-badge">IDR</span>
-            <span style="font-size:12px;font-weight:600;color:var(--text)">${k.harga}</span>
-          </div>
-          <div class="${booking?'k-booking':'k-booking ok'}">
-            ${booking ? '⚠ ' : '✓ '}${k.notes}
-          </div>
-          <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            ${mUrl
-              ? `<a href="${mUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
-                 <button class="maps-edit-btn has-link" onclick="openMapsEdit('${mKey}','kuliner','${mUrl.replace(/'/g,"\\'")}','${k.nama.replace(/'/g,"\\'")}')">✎</button>`
-              : `<button class="maps-edit-btn" onclick="openMapsEdit('${mKey}','kuliner','','${k.nama.replace(/'/g,"\\'")}')">📍 + Link Maps</button>`
-            }
-          </div>
-        </div>
-      </div>`;
-    }).join('');
+    const container = document.getElementById('kuliner-'+loc);
+    const all = [...(KULINER_DATA[loc]||[]), ...(kulinerCustom[loc]||[])];
+    const filtered = filter === 'semua' ? all : all.filter(k => k.tipe === filter);
+
+    // Group by tipe for section headers
+    const groups = {};
+    filtered.forEach((k,ki) => {
+      const t = k.tipe||'food';
+      if (!groups[t]) groups[t] = [];
+      groups[t].push({...k, _ki: ki, _custom: !!k._custom});
+    });
+
+    const tipeLabel = {food:'🍽 Restoran', bar:'🍺 Bar & Nightlife', cafe:'☕ Cafe'};
+    const tipeOrder = ['food','bar','cafe'];
+
+    container.innerHTML = tipeOrder.filter(t => groups[t]).map(t => `
+      <div class="k-tipe-header">${tipeLabel[t] || t}</div>
+      <div class="k-grid" style="margin-bottom:8px">
+        ${groups[t].map(k => {
+          const mKey = (k._custom ? 'custom_' : '') + loc+'_'+(k._ki);
+          const _sk  = KULINER_NAME_MAP[k.nama];
+          const mUrl = (_sk && sharedMaps[_sk]) || (kulinerMaps && kulinerMaps[mKey]) || '';
+          const booking = k.booking;
+          const tipeTag = k.tipe==='bar' ? 'tag-bar' : k.tipe==='cafe' ? 'tag-cafe' : 'tag-food';
+          return `<div class="k-card">
+            <div class="k-card-top">
+              <div class="k-city">${k.kota}</div>
+              <div class="k-name">${k.nama}</div>
+              <div class="k-tags">
+                <span class="tag ${tipeTag}">${k.tipe==='bar'?'🍺 Bar':k.tipe==='cafe'?'☕ Cafe':'🍽 Resto'}</span>
+                ${k.tags.map(tt => {
+                  const tc = tt.includes('Halal')?'tag-halal':tt.includes('Michelin')||tt.includes('Bib')?'tag-michelin':'tag-food';
+                  return `<span class="tag ${tc}">✦ ${tt}</span>`;
+                }).join('')}
+              </div>
+              <button class="k-edit-btn" onclick="openKulinerEdit('${loc}',${k._ki},${k._custom||false})">✏ Edit</button>
+            </div>
+            <div class="k-body">
+              <div class="k-menu">${k.menu}</div>
+              <div class="k-price">
+                <span class="idr-badge">IDR</span>
+                <span style="font-size:12px;font-weight:600;color:var(--text)">${k.harga}</span>
+              </div>
+              <div class="${booking?'k-booking':'k-booking ok'}">
+                ${booking ? '⚠ ' : '✓ '}${k.notes}
+              </div>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                ${mUrl
+                  ? `<a href="${mUrl}" target="_blank" rel="noopener" class="maps-link-btn">📍 Buka Maps</a>
+                     <button class="maps-edit-btn has-link" onclick="openMapsEdit('${mKey}','kuliner','${mUrl.replace(/'/g,"\\'")}','${k.nama.replace(/'/g,"\\'")}')">✎</button>`
+                  : `<button class="maps-edit-btn" onclick="openMapsEdit('${mKey}','kuliner','','${k.nama.replace(/'/g,"\\'")}')">📍 + Link Maps</button>`
+                }
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `).join('');
   });
 }
 
@@ -2140,6 +2308,33 @@ const TIPS_DATA = [
     {label:'Konversi Harga Cepat',detail:'Kalau lihat harga THB di sana, langsung kali 531 untuk dapat IDR. Misal: 300 THB × 531 = Rp 159.300',meta:'×531'},
     {label:'Musim Mei',detail:'Panas banget siang hari (35°C+). Bawa sunscreen, topi, pakaian ringan. Hujan sesekali di sore hari.',meta:'Bawa sunscreen'},
     {label:'Airbnb Bangkok',detail:'Intharama 9, Phaya Thai · 5 menit Grab ke Ari & Chatuchak · dekat BTS Saphan Khwai',meta:'Home base'},
+    {label:'Durian & Buah Eksotis',detail:'Coba durian monthong di Or Tor Kor Market — yang terbaik di Thailand. Juga mangosteen, rambutan, sala. Murah banget.',meta:'Or Tor Kor'},
+    {label:'Mango Sticky Rice',detail:'Dessert wajib Thailand: ketan putih + mangga harum manis + santan. Beli di pasar atau street food. Rp 26–53rb/porsi.',meta:'Must try'},
+  ]},
+  {title:'💰 TIPS BELANJA & TAWAR', items:[
+    {label:'Chatuchak Weekend Market',detail:'Pasar terbesar Asia Tenggara · 8,000+ lapak · buka Sabtu–Minggu saja. Barang unik, vintage, fashion lokal. Datang pagi, tutup 18:00.',meta:'Sabtu–Minggu'},
+    {label:'Tawar Menawar',detail:'Boleh tawar di pasar tradisional & Chatuchak. Mulai dari 60–70% harga awal. Jangan tawar di mall & toko ber-AC.',meta:'Di pasar saja'},
+    {label:'Duty Free Bandara',detail:'Beli cokelat, parfum, dan alkohol di duty free saat transit KL. Lebih murah dari duty free Bangkok. Cek batas bawaan ke Indonesia.',meta:'KL Transit'},
+    {label:'Oleh-oleh Terbaik',detail:'Tom Yum paste, green curry paste, coconut milk powder, Thai tea, wafer lapis — semua ada di Or Tor Kor atau supermarket Lotus/Tops.',meta:'Bawa pulang'},
+  ]},
+  {title:'🏥 KESEHATAN & DARURAT', items:[
+    {label:'Asuransi Perjalanan',detail:'Pastikan sudah ada asuransi aktif sebelum berangkat. Sakit di Thailand bisa sangat mahal — rumah sakit privat world-class tapi harganya juga.',meta:'Wajib'},
+    {label:'Obat Bawaan',detail:'Bawa antidiare, paracetamol, antasida, obat mabuk. Street food lezat tapi perut bisa kaget. Better safe than sorry.',meta:'Bawa dari rumah'},
+    {label:'Air Minum',detail:'JANGAN minum air keran langsung. Beli air mineral botol — murah banget, Rp 5–10rb. Selalu ada di 7-Eleven.',meta:'Beli botol'},
+    {label:'Kontak Darurat Thailand',detail:'Polisi: 191 · Ambulans: 1669 · Tourist Police: 1155 (English) · KBRI Bangkok: +66 2 252 5135',meta:'Screenshot ini'},
+  ]},
+  {title:'📱 APPS WAJIB INSTALL', items:[
+    {label:'Grab Thailand',detail:'Transportasi utama. Bisa pesan GrabCar, GrabBike, GrabFood. Isi saldo atau bayar cash. Lebih murah & aman dari taksi biasa.',meta:'Wajib #1'},
+    {label:'Google Maps Offline',detail:'Download peta Bangkok & Pattaya untuk offline sebelum berangkat. Settings → Offline Maps → area Thailand.',meta:'Download offline'},
+    {label:'Google Translate',detail:'Download bahasa Thai untuk offline. Fitur kamera translate langsung dari foto menu/tulisan sangat berguna.',meta:'Camera translate'},
+    {label:'XE Currency',detail:'Konverter mata uang real-time. Check kurs THB terkini sebelum exchange atau bayar.',meta:'Cek kurs'},
+    {label:'Klook / Airpaz',detail:'Beli tiket atraksi & aktivitas online, kadang lebih murah dari beli di tempat. Untuk Muay Thai sudah pakai muaytix.com.',meta:'Tiket online'},
+  ]},
+  {title:'🛂 IMIGRASI & DOKUMEN', items:[
+    {label:'Visa Thailand',detail:'Indonesia bebas visa Thailand hingga 60 hari. Pastikan passport masih berlaku minimal 6 bulan dari tanggal keberangkatan.',meta:'Bebas visa'},
+    {label:'Kartu Imigrasi (TM.6)',detail:'Sejak 2024, Thailand sudah hapus kartu TM.6 fisik. Check-in online lewat Thailand Customs D-TIMS jika diminta.',meta:'Digital sekarang'},
+    {label:'Bukti Keuangan',detail:'Petugas imigrasi kadang tanya. Siapkan screenshot rekening atau perlihatkan kartu kredit. Nominal Rp 2–5 juta per hari biasanya cukup.',meta:'Siapkan bukti'},
+    {label:'Customs Indonesia',detail:'Batas bawaan barang dari luar negeri USD 500 per orang. Lebih dari itu kena bea masuk. Alkohol maks 1 liter, rokok maks 200 batang.',meta:'Batas bawaan'},
   ]},
 ];
 
@@ -2389,6 +2584,140 @@ function delPackItem(sec, item) {
   fbSet('customPackItems', PACK_ITEMS);
   renderPacking();
   toast('Item dihapus');
+}
+
+
+
+// ═══════════════════════════════════════
+// BOOKING EDIT
+// ═══════════════════════════════════════
+let _bookingEditKey = null;
+
+function openBookingEdit(key) {
+  const b = bookings[key];
+  if (!b) return;
+  _bookingEditKey = key;
+  document.getElementById('booking-sheet-title').textContent = '✏️ Edit — ' + b.nama;
+  document.getElementById('be-tipe').value  = b.tipe || 'Flight';
+  document.getElementById('be-nama').value  = b.nama || '';
+  document.getElementById('be-tgl').value   = b.tgl  || '';
+  document.getElementById('be-prov').value  = b.prov || '';
+  document.getElementById('be-status').value = b.status || 'Confirmed';
+  document.getElementById('be-pic').value   = b.pic  || '';
+  document.getElementById('be-notes').value = b.notes || '';
+  openBS('booking-sheet');
+}
+
+function saveBookingEdit() {
+  if (!_bookingEditKey) return;
+  fbUpdate('bookings/' + _bookingEditKey, {
+    tipe:   document.getElementById('be-tipe').value,
+    nama:   document.getElementById('be-nama').value.trim(),
+    tgl:    document.getElementById('be-tgl').value.trim(),
+    prov:   document.getElementById('be-prov').value.trim(),
+    status: document.getElementById('be-status').value,
+    pic:    document.getElementById('be-pic').value,
+    notes:  document.getElementById('be-notes').value.trim(),
+  });
+  closeBS();
+  toast('Booking diperbarui ✓');
+}
+
+// ═══════════════════════════════════════
+// KULINER FILTER
+// ═══════════════════════════════════════
+function setKulinerFilter(type, btn) {
+  window._kulinerFilter = type;
+  document.querySelectorAll('.k-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderKuliner();
+}
+
+// ═══════════════════════════════════════
+// KULINER ADD / EDIT
+// ═══════════════════════════════════════
+let _kulinerCtx = null; // {loc, idx, isCustom}
+
+function openKulinerAdd(loc) {
+  _kulinerCtx = { loc, idx: null, isCustom: true };
+  document.getElementById('kuliner-sheet-title').textContent = '➕ Tambah Tempat';
+  document.getElementById('kuliner-sheet-loc').textContent   = loc === 'pattaya' ? '📍 Pattaya' : '📍 Bangkok';
+  document.getElementById('ke-tipe').value    = 'food';
+  document.getElementById('ke-nama').value    = '';
+  document.getElementById('ke-kota').value    = loc === 'pattaya' ? 'PATTAYA — ' : 'BANGKOK — ';
+  document.getElementById('ke-menu').value    = '';
+  document.getElementById('ke-harga').value   = '';
+  document.getElementById('ke-tags').value    = '';
+  document.getElementById('ke-notes').value   = '';
+  document.getElementById('ke-booking').value = 'false';
+  document.getElementById('kuliner-del-row').style.display = 'none';
+  openBS('kuliner-sheet');
+  setTimeout(() => document.getElementById('ke-nama').focus(), 150);
+}
+
+function openKulinerEdit(loc, idx, isCustom) {
+  const list = isCustom ? (kulinerCustom[loc]||[]) : (KULINER_DATA[loc]||[]);
+  // find by original index
+  const custom = isCustom ? kulinerCustom[loc]||[] : null;
+  const item = isCustom
+    ? (kulinerCustom[loc]||[]).find((_,i) => i === idx)
+    : KULINER_DATA[loc][idx];
+  if (!item) return;
+  _kulinerCtx = { loc, idx, isCustom };
+  document.getElementById('kuliner-sheet-title').textContent = '✏️ Edit Tempat';
+  document.getElementById('kuliner-sheet-loc').textContent   = loc === 'pattaya' ? '📍 Pattaya' : '📍 Bangkok';
+  document.getElementById('ke-tipe').value    = item.tipe || 'food';
+  document.getElementById('ke-nama').value    = item.nama || '';
+  document.getElementById('ke-kota').value    = item.kota || '';
+  document.getElementById('ke-menu').value    = item.menu || '';
+  document.getElementById('ke-harga').value   = item.harga || '';
+  document.getElementById('ke-tags').value    = (item.tags||[]).join(', ');
+  document.getElementById('ke-notes').value   = item.notes || '';
+  document.getElementById('ke-booking').value = item.booking ? 'true' : 'false';
+  document.getElementById('kuliner-del-row').style.display = isCustom ? '' : 'none';
+  openBS('kuliner-sheet');
+}
+
+function saveKulinerItem() {
+  const nama = document.getElementById('ke-nama').value.trim();
+  if (!nama) { toast('Nama tempat tidak boleh kosong!','err'); return; }
+  const item = {
+    _custom: true,
+    tipe:    document.getElementById('ke-tipe').value,
+    nama,
+    kota:    document.getElementById('ke-kota').value.trim(),
+    menu:    document.getElementById('ke-menu').value.trim(),
+    harga:   document.getElementById('ke-harga').value.trim(),
+    tags:    document.getElementById('ke-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    notes:   document.getElementById('ke-notes').value.trim(),
+    booking: document.getElementById('ke-booking').value === 'true',
+  };
+  const loc = _kulinerCtx.loc;
+  if (!kulinerCustom[loc]) kulinerCustom[loc] = [];
+
+  if (_kulinerCtx.isCustom && _kulinerCtx.idx !== null) {
+    // Edit existing custom
+    kulinerCustom[loc][_kulinerCtx.idx] = item;
+  } else if (!_kulinerCtx.isCustom) {
+    // Edit static — store override in kulinerCustom with special key
+    // For static items, just show a toast that static items aren't editable by save
+    // Actually since we passed isCustom=false, treat as add
+    kulinerCustom[loc].push(item);
+  } else {
+    kulinerCustom[loc].push(item);
+  }
+  fbSet('kulinerCustom', kulinerCustom);
+  closeBS();
+  toast('Tempat disimpan ✓');
+}
+
+function delKulinerItem() {
+  if (!_kulinerCtx || !_kulinerCtx.isCustom) return;
+  if (!confirm('Hapus tempat ini?')) return;
+  kulinerCustom[_kulinerCtx.loc].splice(_kulinerCtx.idx, 1);
+  fbSet('kulinerCustom', kulinerCustom);
+  closeBS();
+  toast('Tempat dihapus');
 }
 
 // ═══════════════════════════════════════
